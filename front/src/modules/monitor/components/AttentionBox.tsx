@@ -2,6 +2,8 @@ import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { EVENTS } from "../../../configs/constants/events";
+import { Ticket } from "../../shared/components/models/ticket";
+import useMonitor from "../hooks/use-monitor";
 
 const socket = io("http://localhost:3000");
 
@@ -11,10 +13,13 @@ export interface Turns {
 }
 
 const AttentionBox = () => {
-    const [pendingTickets, setPendingTickets] = useState<Turns[]>(() => {
-        const savedTickets = localStorage.getItem("pendingTickets");
-        return savedTickets ? JSON.parse(savedTickets) : [];
-      });
+  // const [pendingTickets, setPendingTickets] = useState<Turns[]>(() => {
+  //     const savedTickets = localStorage.getItem("pendingTickets");
+  //     return savedTickets ? JSON.parse(savedTickets) : [];
+  //   });
+
+  // const [pendingTickets, setPendingTickets] = useState<Ticket[]>([]);
+  const { pendingTickets } = useMonitor();
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -25,14 +30,14 @@ const AttentionBox = () => {
       console.log("Desconectado del servidor");
     });
 
-    socket.on(EVENTS.MONITOR.TICKET_GENERATED, (data: Turns) => {
-      setPendingTickets((restTickets) => {
-        const updatedTickets = [data, ...restTickets]
-        localStorage.setItem("pendingTickets", JSON.stringify(updatedTickets));
-        return updatedTickets;
-    });
-      console.log(data);
-    });
+    // socket.on(EVENTS.MONITOR.TICKET_GENERATED, (ticket: Ticket) => {
+    //   setPendingTickets((restTickets) => [ticket, ...restTickets]
+    //     // const updatedTickets = [ticket, ...restTickets]
+    //     // localStorage.setItem("pendingTickets", JSON.stringify(updatedTickets));
+    //     // return updatedTickets;
+    //   );
+    //   console.log(ticket);
+    // });
 
     return () => {
       socket.off("connect");
@@ -84,8 +89,8 @@ const AttentionBox = () => {
             {pendingTickets.length > 1
               ? `Turno: ${pendingTickets[pendingTickets.length - 1].turn}`
               : pendingTickets.length === 1
-              ? `Turno: ${pendingTickets[0].turn}`
-              : "No hay turnos pendientes"}
+                ? `Turno: ${pendingTickets[0].turn}`
+                : "No hay turnos pendientes"}
           </Typography>
         </Box>
       </div>
@@ -111,7 +116,7 @@ const AttentionBox = () => {
                     backgroundColor: "white",
                   }}
                 >
-                  Box: {ticket.box}
+                  {/* Box: {ticket.box.name} */}
                 </Typography>
               ))}
           <Typography
@@ -126,8 +131,8 @@ const AttentionBox = () => {
             {pendingTickets.length > 1
               ? `Box: ${pendingTickets[pendingTickets.length - 1].box}`
               : pendingTickets.length === 1
-              ? `Box: ${pendingTickets[0].box}`
-              : "No hay turnos pendientes"}
+                ? `Box: ${pendingTickets[0].box}`
+                : "No hay turnos pendientes"}
           </Typography>
         </Box>
       </div>

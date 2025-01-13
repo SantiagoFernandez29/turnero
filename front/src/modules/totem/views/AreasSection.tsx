@@ -33,34 +33,30 @@ const AreasSection = () => {
 
     const handleClickedArea = (area: Area) => {
         toast.success(`Seleccionó el área "${area.name}"`);
-        // setTurns((prev) => prev + 1);
-        // setWaitingCount((prev) => prev + 1);
         const newTurn = turns + 1;
         const newWaitingCount = waitingCount + 1;
         setTurns(newTurn);
         setWaitingCount(newWaitingCount);
 
-        socket.emit(EVENTS.TOTEM.SELECT_AREA, { 
-            ticket: {
-                areaTitle: area.name,
-                turn: area.description + newTurn,
-                emitedDate: new Date().toLocaleDateString("es-AR",{
-                    year: "numeric",
-                    month: "numeric",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit"
-                }),
-                waitingCount: newWaitingCount,
-                voucher: "000000",
-            }
+        socket.emit(EVENTS.TOTEM.SELECT_AREA, {
+            areaTitle: area.name,
+            turn: area.description + newTurn,
+            emitedDate: new Date().toLocaleDateString("es-AR", {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            }),
+            waitingCount: newWaitingCount,
+            voucher: "000000",
         });
     };
 
-    return(
+    return (
         <Box className="flex flex-col items-center gap-10 place-content-between m-5">
             <Typography variant="h4" style={{ fontWeight: "lighter", textAlign: "center" }}> Seleccione el área sobre la cual desea solicitar un turno </Typography>
-            <Box className = "grid grid-cols-2 gap-4 w-full">
+            <Box className="grid grid-cols-2 gap-4 w-full">
                 {AREAS.map((area) => (
                     <AreaButton key={area.id} title={area.name} onClick={() => handleClickedArea(area)} />
                 ))}

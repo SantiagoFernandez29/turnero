@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import AttentionBox from "../components/Box";
+import AttentionBox from "../components/AttentionBox";
 
 
 const MonitorHomeView = () => {

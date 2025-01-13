@@ -4,4 +4,8 @@ export interface TicketDto {
     emitedDate: string;
     waitingCount: number;
     voucher: string;
+    box: {
+        id: number;
+        name: string;
+    }
 }

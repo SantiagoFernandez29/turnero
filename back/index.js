@@ -10,24 +10,29 @@ const io = new Server(httpServer, {
 })
 
 io.on('connection', (socket) => {
-    console.log('Se conectó un cliente');
 
-    socket.on(EVENTS.TOTEM.SELECT_AREA, (data) => {
-        console.log(data);
+    socket.on(EVENTS.TOTEM.SELECT_AREA, (ticket) => {
+        console.log(ticket);
 
-        io.emit(EVENTS.MONITOR.TICKET_GENERATED, {
-            turn: data.ticket.turn,
-            box: "BOX-X"
-        })
+        // io.emit(EVENTS.MONITOR.TICKET_GENERATED, {
+        //     turn: ticket.ticket.turn,
+        //     box: "BOX-X"
+        // })
+
+        // io.emit(EVENTS.TOTEM.TURN_GENERATED, {
+        //     turn: ticket.ticket.turn
+        // })
+
+        io.emit(EVENTS.BACKOFFICE.TICKET_GENERATED, ticket)
     })
 
-    socket.on(EVENTS.BACKOFFICE.CALL_TICKET, (data) => {
-        console.log(data);
+    socket.on(EVENTS.BACKOFFICE.CALL_TICKET, (ticket) => {
+        console.log(ticket);
+        io.emit(EVENTS.MONITOR.TICKET_GENERATED, ticket)
+    })
 
-        io.emit(EVENTS.MONITOR.TICKET_GENERATED, {
-            turn: data.ticket.turn,
-            box: data.ticket.box
-        })
+    socket.on(EVENTS.BACKOFFICE.CONNECTED_BOX, (data) => {
+        console.log(data);
     })
     
 });

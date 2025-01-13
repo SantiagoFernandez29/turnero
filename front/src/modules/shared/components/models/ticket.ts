@@ -1,5 +1,11 @@
-import { TicketDto } from "../dto/ticket";
-
-export type TicketProps = {
-  ticket: TicketDto;
+export type Ticket = {
+  areaTitle: string;
+  turn: string;
+  emitedDate: string;
+  waitingCount: number;
+  voucher: string;
+  box: {
+    id: number;
+    name: string;
+  };
 };
