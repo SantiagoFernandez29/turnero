@@ -13,16 +13,6 @@ io.on('connection', (socket) => {
 
     socket.on(EVENTS.TOTEM.SELECT_AREA, (ticket) => {
         console.log(ticket);
-
-        // io.emit(EVENTS.MONITOR.TICKET_GENERATED, {
-        //     turn: ticket.ticket.turn,
-        //     box: "BOX-X"
-        // })
-
-        // io.emit(EVENTS.TOTEM.TURN_GENERATED, {
-        //     turn: ticket.ticket.turn
-        // })
-
         io.emit(EVENTS.BACKOFFICE.TICKET_GENERATED, ticket)
     })
 
@@ -33,6 +23,25 @@ io.on('connection', (socket) => {
 
     socket.on(EVENTS.BACKOFFICE.CONNECTED_BOX, (data) => {
         console.log(data);
+    })
+    
+    socket.on(EVENTS.BACKOFFICE.PENDING_TICKETS, (tickets) => {
+        console.log(tickets);
+        io.emit(EVENTS.BACKOFFICE.NEW_PENDING_TICKETS, tickets)
+    })
+
+    socket.on(EVENTS.BACKOFFICE.FINISH_TICKET, (ticket) => {
+        console.log(ticket);
+        io.emit(EVENTS.MONITOR.FINISH_TICKET, ticket)
+    })
+
+    socket.on(EVENTS.BACKOFFICE.TICKET_SERVED, (ticket) => {
+        console.log(ticket);
+        io.emit(EVENTS.MONITOR.TICKET_SERVED, ticket)
+    })
+
+    socket.on(EVENTS.BACKOFFICE.RECALLING_TICKET_ALARM, () => {
+        io.emit(EVENTS.MONITOR.RECALLING_TICKET_ALARM)
     })
     
 });
