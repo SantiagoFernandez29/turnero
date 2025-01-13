@@ -27,9 +27,8 @@ const BackofficeHomeView = () => {
       <Box>
         <Typography variant="h4">Tickets pendientes:</Typography>
         <Box className=" flex flex-col gap-10">
-          {/* INVERTIR EL ÓRDEN DE LA LISTA DE TICKETS PENDIENTES */}
           {totalPendingTickets.length >= 1 &&
-            totalPendingTickets.map((ticket, index) => (
+            totalPendingTickets.slice(0,5).map((ticket, index) => (
               <Box
                 key={index}
                 className="flex flex-row items-center justify-between"
