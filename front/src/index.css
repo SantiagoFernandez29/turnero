@@ -6,3 +6,7 @@ p {
   color: #2e333a;
   font-weight: bold;
 }
+
+.font-sans {
+  font-family: 'Quicksand', sans-serif;
+}

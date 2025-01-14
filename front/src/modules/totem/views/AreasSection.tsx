@@ -2,10 +2,15 @@ import { AREAS } from "../../../configs/constants/areas";
 import AreaButton from "../components/AreaButton";
 import { Box, Button, Typography } from "@mui/material";
 import useTotem from "../hooks/use-totem";
+import { useEffect } from "react";
 
 const AreasSection = () => {
 
-    const { handleClickedArea } = useTotem();
+    const { handleClickedArea, connectToServer } = useTotem();
+
+    useEffect(() => {
+        connectToServer();
+    }, [connectToServer]);
 
     return (
         <Box className="flex flex-col items-center gap-10 place-content-between m-5">

@@ -23,7 +23,7 @@ const useMonitor = () => {
         });
 
         socket.on(EVENTS.MONITOR.TICKET_GENERATED, (ticket: Ticket) => {
-            setPendingTickets((restTickets) => [ticket, ...restTickets]);
+            setPendingTickets((prevTickets) => [...prevTickets, ticket]);
             console.log("Ticket del backoffice: ", ticket);
             console.log("Tickets pendientes: ", pendingTickets);
         });

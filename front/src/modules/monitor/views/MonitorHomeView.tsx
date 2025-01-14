@@ -4,10 +4,8 @@ import AttentionBox from "../components/AttentionBox";
 
 const MonitorHomeView = () => {
     return (
-        <Box className= "flex flex-row items-top justify-center">
-            <div>
-                <AttentionBox />
-            </div>
+        <Box className="flex flex-row items-top justify-left w-full">
+            <AttentionBox />
         </Box>
     );
 };

@@ -95,6 +95,7 @@ const useBackoffice = ({ id }: { id: string }) => {
     }
 
     const handleFinishTicket = (ticket: Ticket) => {
+        toast.success(`Cliente con Ticket ${ticket.turn} recibido`);
         setTicketInService(null);
         socket.emit(EVENTS.BACKOFFICE.FINISH_TICKET, ticket);
     }

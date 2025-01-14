@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { io } from "socket.io-client";
 import { SOCKET_URL } from "../../../configs/constants/url";
 import { Area } from "../models/area";
@@ -13,25 +13,26 @@ const useTotem = () => {
 
     const socket = io(SOCKET_URL);
 
-
-    useEffect(() => {
+    const connectToServer = useCallback(() => {
         socket.on("connect", () => {
             console.log("Conectado al servidor");
         });
-
+    
         socket.on("disconnect", () => {
             console.log("Desconectado del servidor");
         });
-
+    
         return () => {
             socket.off("connect");
             socket.off("disconnect");
+            //ver de sacar el disconnect
             socket.disconnect();
         }
-
-    }, []);
+    
+    }, [socket]);
 
     const handleClickedArea = (area: Area) => {
+        console.log(area);
         toast.success(`Seleccionó el área "${area.name}"`);
         const newTurn = turns + 1;
         const newWaitingCount = waitingCount + 1;
@@ -53,7 +54,7 @@ const useTotem = () => {
         });
     };
 
-    return { handleClickedArea };
+    return { handleClickedArea, connectToServer };
 };
 
 export default useTotem;

@@ -17,91 +17,98 @@ const BackofficeHomeView = () => {
   console.log(totalPendingTickets);
 
   return (
-    <Box className="flex flex-col items-center gap-10 m-5">
-      <Typography variant="h3" className="text-center">
-        Backoffice Home View
+    <Box className="flex flex-col items-center gap-10 m-5 w-full">
+      <Typography variant="h5" className="text-center" style={{ fontWeight: "bold" }}>
+        Backoffice Home View - Box <span className="text-purple-700">{id}</span>
       </Typography>
-      <Typography variant="h4">
-        Box <span className="text-red-500">{id}</span>
-      </Typography>
-      <Box>
-        <Typography variant="h4">Tickets pendientes:</Typography>
-        <Box className=" flex flex-col gap-10">
-          {totalPendingTickets.length >= 1 &&
-            totalPendingTickets.slice(0,5).map((ticket, index) => (
-              <Box
-                key={index}
-                className="flex flex-row items-center justify-between"
-              >
-                <Typography
+      <Box className="flex flex-row place-content-between w-full">
+        <Box className="flex flex-col gap-5 bg-indigo-200 p-8 border-2 border-indigo-300 rounded-lg shadow-lg">
+          <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold" }}>Pendientes</Typography>
+          <Box className=" flex flex-col gap-10">
+            {totalPendingTickets.length >= 1 &&
+              totalPendingTickets.slice(0, 5).map((ticket, index) => (
+                <Box
                   key={index}
-                  variant="h6"
-                  style={{ fontWeight: "lighter" }}
+                  className={index === 0 ? "flex flex-row items-center justify-between bg-lime-300 p-2 rounded-lg shadow-lg w-" : "flex flex-row items-center justify-between bg-indigo-100 p-2 rounded-lg shadow-lg"}
                 >
-                  {ticket.turn}
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleCallTicket(ticket)}
-                >
-                  Adjudicar
-                </Button>
-              </Box>
-            ))}
-        </Box>
-      </Box>
-      <Box>
-        <Typography variant="h4">Tickets llamados:</Typography>
-        <Box className=" flex flex-col gap-10">
-          {boxPendingTickets.length >= 1 &&
-            boxPendingTickets.map((ticket, index) => (
-              <Box
-                key={index}
-                className="flex flex-row items-center justify-between"
-              >
-                <Typography
-                  key={index}
-                  variant="h6"
-                  style={{ fontWeight: "lighter" }}
-                >
-                  {ticket.turn}
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="warning"
-                  onClick={() => handleSetTicketInService(ticket)}
-                >
-                  Atender
-                </Button>
-              </Box>
-            ))}
-        </Box>
-      </Box>
-      <Box>
-        <Typography variant="h4">Ticket en servicio:</Typography>
-        <Box className=" flex flex-col gap-10">
-          {ticketInService && (
-            <Box className="flex flex-row items-center justify-between">
-              <Typography variant="h6" style={{ fontWeight: "lighter" }}>
-                {ticketInService.turn}
+                  <Typography
+                    key={index}
+                    style={index === 0 ? { fontWeight: "bold", color: "green" } : { fontWeight: "lighter" }}
+                  >
+                    {ticket.turn}
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color={index === 0 ? "success" : "primary"}
+                    style={{ fontWeight: "bold" }}
+                    onClick={() => handleCallTicket(ticket)}
+                  >
+                    Adjudicar
+                  </Button>
+                </Box>
+              ))}
+            {totalPendingTickets.length === 0 &&
+              <Typography className="text-center" style={{ fontWeight: "lighter", color: "red" }}>
+                No hay tickets pendientes
               </Typography>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => handleFinishTicket(ticketInService)}
-              >
-                Finalizar
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => handleReiterateTicket()}
-              >
-                Reiterar
-              </Button>
-            </Box>
-          )}
+            }
+          </Box>
+        </Box>
+        <Box className="flex flex-col gap-5 bg-indigo-200 p-8 border-2 border-indigo-300 rounded-lg shadow-lg">
+          <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold" }}>Llamar</Typography>
+          <Box className=" flex flex-col gap-10 items-center">
+            {boxPendingTickets.length >= 1 &&
+              boxPendingTickets.slice(0, 5).map((ticket, index) => (
+                <Box
+                  key={index}
+                  className={index === 0 ? "flex flex-row items-center justify-between bg-lime-300 p-2 rounded-lg shadow-lg w-auto gap-4" : "flex flex-row items-center justify-between bg-indigo-100 p-2 rounded-lg shadow-lg w-3/4"}
+                >
+                  <Typography
+                    key={index}
+                    style={index === 0 ? { fontWeight: "bold", color: "green" } : { fontWeight: "lighter" }}
+                  >
+                    {ticket.turn}
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color={index === 0 ? "success" : "primary"}
+                    style={{ fontWeight: "bold" }}
+                    onClick={() => handleSetTicketInService(ticket)}
+                  >
+                    Atender
+                  </Button>
+                  {index === 0 && (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => handleReiterateTicket()}
+                    >
+                      Reiterar
+                    </Button>
+                  )}
+                </Box>
+              ))}
+          </Box>
+        </Box>
+        <Box className="flex flex-col gap-5 bg-indigo-200 p-8 border-2 border-indigo-300 rounded-lg shadow-lg">
+          <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold" }}>Recibido</Typography>
+          <Box className="flex flex-col gap-10">
+            {ticketInService && (
+              <Box className="flex flex-row items-center justify-between bg-red-400 p-2 rounded-lg shadow-lg gap-4">
+                <Typography style={{ fontWeight: "bold", color: "red" }}>
+                  {ticketInService.turn}
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="error"
+                  style={{ fontWeight: "bold" }}
+                  onClick={() => handleFinishTicket(ticketInService)}
+                >
+                  Finalizar
+                </Button>
+              </Box>
+            )}
+          </Box>
         </Box>
       </Box>
     </Box>
