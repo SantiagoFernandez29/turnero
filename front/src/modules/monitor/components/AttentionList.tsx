@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import useMonitor from "../hooks/use-monitor";
 
-const AttentionBox = () => {
+const AttentionList = () => {
   const { pendingTickets, ticketsReadyToService } = useMonitor();
 
   console.log("ticketsReadyToService", ticketsReadyToService);
@@ -62,4 +62,4 @@ const AttentionBox = () => {
   );
 };
 
-export default AttentionBox;
+export default AttentionList;

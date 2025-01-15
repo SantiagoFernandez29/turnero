@@ -1,11 +1,13 @@
 import { Box } from "@mui/material";
-import AttentionBox from "../components/AttentionBox";
+import AttentionList from "../components/AttentionList";
+import VideoDisplayer from "../components/VideoDisplayer";
 
 
 const MonitorHomeView = () => {
     return (
-        <Box className="flex flex-row items-top justify-left w-full">
-            <AttentionBox />
+        <Box className="flex flex-row items-top place-content-between w-full">
+            <AttentionList />
+            <VideoDisplayer />
         </Box>
     );
 };
