@@ -68,6 +68,7 @@ const useBackoffice = ({ id }: { id: string }) => {
                     name: `BOX-${id}`,
                 },
             });
+            socket.emit(EVENTS.BACKOFFICE.PENDING_TICKETS, newTotalPendingTickets);
         } else {
             toast.error("Ya hay un ticket en servicio");
         }
@@ -113,7 +114,7 @@ const useBackoffice = ({ id }: { id: string }) => {
                         name: `BOX-${id}`,
                     },
                 },
-                
+
             });
             socket.emit(EVENTS.BACKOFFICE.PENDING_TICKETS, newBoxPendingTickets);
         } else {

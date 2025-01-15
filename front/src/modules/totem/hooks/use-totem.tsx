@@ -22,14 +22,12 @@ const useTotem = () => {
             console.log("Desconectado del servidor");
         });
 
-        socket.on(EVENTS.GENERAL.FINISH_TICKET, (waitingCount) => {
-            console.log("Gente en espera: ", waitingCount);
-            if(waitingCount === 0){
+        socket.on(EVENTS.GENERAL.FINISH_TICKET, (pendingTickets) => {
+            if(pendingTickets.length === 0){
                 setWaitingCount(0)
             } else {
-                setWaitingCount(waitingCount - 1);
+                setWaitingCount(pendingTickets.length);
             }
-            console.log("Gente en espera ahora: ", waitingCount);
         });
     
         return () => {
