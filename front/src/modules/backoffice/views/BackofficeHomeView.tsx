@@ -43,7 +43,7 @@ const BackofficeHomeView = () => {
                     style={{ fontWeight: "bold" }}
                     onClick={() => handleCallTicket(ticket)}
                   >
-                    Adjudicar
+                    Llamar
                   </Button>
                 </Box>
               ))}
@@ -54,7 +54,7 @@ const BackofficeHomeView = () => {
             }
           </Box>
         </Box>
-        <Box className="flex flex-col gap-5 bg-indigo-200 p-8 border-2 border-indigo-300 rounded-lg shadow-lg">
+        {/* <Box className="flex flex-col gap-5 bg-indigo-200 p-8 border-2 border-indigo-300 rounded-lg shadow-lg">
           <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold" }}>Llamar</Typography>
           <Box className=" flex flex-col gap-10 items-center">
             {boxPendingTickets.length >= 1 &&
@@ -89,24 +89,44 @@ const BackofficeHomeView = () => {
                 </Box>
               ))}
           </Box>
-        </Box>
+        </Box> */}
         <Box className="flex flex-col gap-5 bg-indigo-200 p-8 border-2 border-indigo-300 rounded-lg shadow-lg">
           <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold" }}>Recibido</Typography>
           <Box className="flex flex-col gap-10">
-            {ticketInService && (
-              <Box className="flex flex-row items-center justify-between bg-red-400 p-2 rounded-lg shadow-lg gap-4">
-                <Typography style={{ fontWeight: "bold", color: "red" }}>
-                  {ticketInService.turn}
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="error"
-                  style={{ fontWeight: "bold" }}
-                  onClick={() => handleFinishTicket(ticketInService)}
-                >
-                  Finalizar
-                </Button>
+            {ticketInService !== null ? (
+              <Box className="flex flex-col gap-5">
+                <Box className="flex flex-row items-center justify-between bg-red-400 p-2 rounded-lg shadow-lg gap-4">
+                  <Typography style={{ fontWeight: "bold", color: "red" }}>
+                    {ticketInService.turn}
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    style={{ fontWeight: "bold" }}
+                    onClick={() => handleFinishTicket(ticketInService)}
+                  >
+                    Finalizar
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleReiterateTicket()}
+                  >
+                    Reiterar
+                  </Button>
+                </Box>
+                <Box className="flex flex-col gap-3 bg-slate-50 p-2 rounded-lg shadow-lg">
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Turno: {ticketInService?.turn}</Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Área: {ticketInService?.areaTitle}</Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Fecha: {ticketInService?.emitedDate}</Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Cantidad de espera: {ticketInService?.waitingCount}</Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Voucher: {ticketInService?.voucher}</Typography>
+                </Box>
               </Box>
+            ) : (
+              <Typography className="text-center" style={{ fontWeight: "lighter", color: "red" }}>
+                No hay tickets en servicio
+              </Typography>
             )}
           </Box>
         </Box>

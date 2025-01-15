@@ -39,7 +39,7 @@ const AttentionList = () => {
         {
             pendingTickets.length > 0 && pendingTickets.slice(0,8).reverse().map((ticket, index) => (
                 <Typography key={index} variant="h4"  style={{ fontWeight: "lighter", textAlign: "center", backgroundColor: "white", padding: "5px" }}>
-                  {ticket.box.name}
+                  {ticket.box?.name || "BOX-X"}
                 </Typography>
               )
             )

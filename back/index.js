@@ -13,21 +13,20 @@ io.on('connection', (socket) => {
 
     socket.on(EVENTS.TOTEM.SELECT_AREA, (ticket) => {
         console.log(ticket);
+        io.emit(EVENTS.MONITOR.TICKET_GENERATED, ticket)
         io.emit(EVENTS.BACKOFFICE.TICKET_GENERATED, ticket)
     })
 
     socket.on(EVENTS.BACKOFFICE.CALL_TICKET, (ticket) => {
         console.log(ticket);
-        io.emit(EVENTS.MONITOR.TICKET_GENERATED, ticket)
-    })
-
-    socket.on(EVENTS.BACKOFFICE.CONNECTED_BOX, (data) => {
-        console.log(data);
+        // io.emit(EVENTS.MONITOR.TICKET_GENERATED, ticket)
+        io.emit(EVENTS.MONITOR.TICKET_CALLED, ticket)
     })
     
     socket.on(EVENTS.BACKOFFICE.PENDING_TICKETS, (tickets) => {
         console.log(tickets);
         io.emit(EVENTS.BACKOFFICE.NEW_PENDING_TICKETS, tickets)
+        io.emit(EVENTS.GENERAL.FINISH_TICKET, tickets)
     })
 
     socket.on(EVENTS.BACKOFFICE.FINISH_TICKET, (ticket) => {

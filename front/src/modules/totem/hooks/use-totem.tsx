@@ -21,6 +21,16 @@ const useTotem = () => {
         socket.on("disconnect", () => {
             console.log("Desconectado del servidor");
         });
+
+        socket.on(EVENTS.GENERAL.FINISH_TICKET, (waitingCount) => {
+            console.log("Gente en espera: ", waitingCount);
+            if(waitingCount === 0){
+                setWaitingCount(0)
+            } else {
+                setWaitingCount(waitingCount - 1);
+            }
+            console.log("Gente en espera ahora: ", waitingCount);
+        });
     
         return () => {
             socket.off("connect");
@@ -32,13 +42,10 @@ const useTotem = () => {
     }, [socket]);
 
     const handleClickedArea = (area: Area) => {
-        console.log(area);
         toast.success(`Seleccionó el área "${area.name}"`);
         const newTurn = turns + 1;
-        const newWaitingCount = waitingCount + 1;
         setTurns(newTurn);
-        setWaitingCount(newWaitingCount);
-
+        
         socket.emit(EVENTS.TOTEM.SELECT_AREA, {
             areaTitle: area.name,
             turn: area.description + newTurn,
@@ -49,9 +56,11 @@ const useTotem = () => {
                 hour: "2-digit",
                 minute: "2-digit"
             }),
-            waitingCount: newWaitingCount,
+            waitingCount: waitingCount,
             voucher: "000000",
         });
+        const newWaitingCount = waitingCount + 1;
+        setWaitingCount(newWaitingCount);
     };
 
     return { handleClickedArea, connectToServer };

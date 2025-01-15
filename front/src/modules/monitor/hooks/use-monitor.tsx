@@ -32,7 +32,7 @@ const useMonitor = () => {
             setTicketsReadyToService((prevTickets) => prevTickets.filter((t) => t.turn !== ticket.turn));
         });
 
-        socket.on(EVENTS.MONITOR.TICKET_SERVED, (ticket: Ticket) => {
+        socket.on(EVENTS.MONITOR.TICKET_CALLED, (ticket: Ticket) => {
             setTicketsReadyToService((prevTickets) => [...prevTickets, ticket]);
             setPendingTickets((prevTickets) => prevTickets.filter((t) => t.turn !== ticket.turn));
             new Audio(sound_effect).play();
@@ -47,7 +47,7 @@ const useMonitor = () => {
             socket.off("disconnect");
             socket.off(EVENTS.MONITOR.TICKET_GENERATED);
             socket.off(EVENTS.MONITOR.FINISH_TICKET);
-            socket.off(EVENTS.MONITOR.TICKET_SERVED);
+            socket.off(EVENTS.MONITOR.TICKET_CALLED);
         }
 
     }, [socket]);

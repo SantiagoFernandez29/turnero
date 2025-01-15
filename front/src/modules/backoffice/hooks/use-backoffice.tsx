@@ -14,7 +14,7 @@ const useBackoffice = ({ id }: { id: string }) => {
 
     const socket = io(SOCKET_URL);
 
-    console.log("Tickets pendientes", totalPendingTickets);
+    // console.log("Tickets pendientes", totalPendingTickets);
 
     useEffect(() => {
 
@@ -27,12 +27,12 @@ const useBackoffice = ({ id }: { id: string }) => {
         });
 
         socket.on(EVENTS.BACKOFFICE.TICKET_GENERATED, (ticket: Ticket) => {
-            console.log("Nuevo ticket generado en el totem", ticket);
+            // console.log("Nuevo ticket generado en el totem", ticket);
             setTotalPendingTickets((prevTickets) => [...prevTickets, ticket]);
         });
 
         socket.on(EVENTS.BACKOFFICE.NEW_PENDING_TICKETS, (tickets: Ticket[]) => {
-            console.log("Tickets pendientes actualizados", tickets);
+            // console.log("Tickets pendientes actualizados", tickets);
             setTotalPendingTickets(tickets);
         });
 
@@ -52,21 +52,48 @@ const useBackoffice = ({ id }: { id: string }) => {
     }
 
     const handleCallTicket = (ticket: Ticket) => {
-        const newTotalPendingTickets = totalPendingTickets.filter((t) => t.turn !== ticket.turn);
-        setTotalPendingTickets(newTotalPendingTickets);
-        socket.emit(EVENTS.BACKOFFICE.CALL_TICKET, {
-            areaTitle: ticket.areaTitle,
-            turn: ticket.turn,
-            emitedDate: ticket.emitedDate,
-            waitingCount: ticket.waitingCount,
-            voucher: ticket.voucher,
-            box: {
-                id: id,
-                name: `BOX-${id}`,
-            },
-        });
-        socket.emit(EVENTS.BACKOFFICE.PENDING_TICKETS, newTotalPendingTickets);
-        setBoxPendingTickets((prevTickets) => [...prevTickets, ticket]);
+        if(ticketInService === null){
+            setTicketInService(ticket);
+            const newTotalPendingTickets = totalPendingTickets.filter((t) => t.turn !== ticket.turn);
+            setTotalPendingTickets(newTotalPendingTickets);
+            socket.emit(EVENTS.BACKOFFICE.PENDING_TICKETS, newTotalPendingTickets);
+            socket.emit(EVENTS.BACKOFFICE.CALL_TICKET, {
+                areaTitle: ticket.areaTitle,
+                turn: ticket.turn,
+                emitedDate: ticket.emitedDate,
+                waitingCount: ticket.waitingCount,
+                voucher: ticket.voucher,
+                box: {
+                    id: id,
+                    name: `BOX-${id}`,
+                },
+            });
+        } else {
+            toast.error("Ya hay un ticket en servicio");
+        }
+        // socket.emit(EVENTS.BACKOFFICE.PENDING_TICKETS, newTotalPendingTickets);
+        // setBoxPendingTickets((prevTickets) => [...prevTickets, ticket]);
+        // if(ticketInService !== null) {
+        //     toast.error("Ya hay un ticket en servicio");
+        // }
+        // if(ticketInService === null) {
+        //     setTicketInService(ticket);
+        //     const newBoxPendingTickets = boxPendingTickets.filter((t) => t.turn !== ticket?.turn);
+        //     setBoxPendingTickets(newBoxPendingTickets);
+        //     socket.emit(EVENTS.BACKOFFICE.TICKET_SERVED,  {
+        //         areaTitle: ticket?.areaTitle,
+        //         turn: ticket?.turn,
+        //         emitedDate: ticket?.emitedDate,
+        //         waitingCount: ticket?.waitingCount,
+        //         voucher: ticket?.voucher,
+        //         box: {
+        //             id: id,
+        //             name: `BOX-${id}`,
+        //         },
+        //     });
+        // } else {
+        //     toast.error("Ya hay un ticket en servicio");
+        // }
     }
 
     const handleSetTicketInService = (ticket: Ticket | null) => {
@@ -75,16 +102,20 @@ const useBackoffice = ({ id }: { id: string }) => {
             const newBoxPendingTickets = boxPendingTickets.filter((t) => t.turn !== ticket?.turn);
             setBoxPendingTickets(newBoxPendingTickets);
             socket.emit(EVENTS.BACKOFFICE.TICKET_SERVED,  {
-                areaTitle: ticket?.areaTitle,
-                turn: ticket?.turn,
-                emitedDate: ticket?.emitedDate,
-                waitingCount: ticket?.waitingCount,
-                voucher: ticket?.voucher,
-                box: {
-                    id: id,
-                    name: `BOX-${id}`,
+                ticket: {
+                    areaTitle: ticket?.areaTitle,
+                    turn: ticket?.turn,
+                    emitedDate: ticket?.emitedDate,
+                    waitingCount: ticket?.waitingCount,
+                    voucher: ticket?.voucher,
+                    box: {
+                        id: id,
+                        name: `BOX-${id}`,
+                    },
                 },
+                
             });
+            socket.emit(EVENTS.BACKOFFICE.PENDING_TICKETS, newBoxPendingTickets);
         } else {
             toast.error("Ya hay un ticket en servicio");
         }
