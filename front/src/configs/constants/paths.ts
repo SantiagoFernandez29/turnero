@@ -1,12 +1,13 @@
 const PATHS = {
     TOTEM: {
-        HOME: '/',
-        AREAS: '/areas',
+        HOME: '/totem',
+        AREAS: '/totem/areas',
     },
     MONITOR: {
         HOME: '/monitor',
     },
     BACKOFFICE: {
+        LOGIN: '/backoffice',
         HOME: '/backoffice/box/:id',
     }
 }
