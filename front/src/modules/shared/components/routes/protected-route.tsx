@@ -1,8 +1,11 @@
 import React from "react";
+import useAuth from "../../../auth/hooks/use-auth";
 
-export default function PrivateRoute({ children }: { children: React.ReactNode }) {
+export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
-    const hasPermission = true;
+    const { user, token } = useAuth();
+
+    const hasPermission = user !== null && token !== null;
 
     if (!hasPermission) {
         return (
