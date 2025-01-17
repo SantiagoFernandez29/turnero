@@ -1,7 +1,7 @@
 import { RouteObject } from "react-router";
 import PATHS from "../../../configs/constants/paths";
 import DefaultLayout from "../../shared/layout/DefaultLayout";
-import { BackofficeHomeView } from "./imports";
+import { BackofficeHomeView, SetBoxView } from "./imports";
 import ProtectedRoute from "../../shared/components/routes/protected-route";
 
 export const backofficeRoutes: RouteObject = {
@@ -14,6 +14,10 @@ export const backofficeRoutes: RouteObject = {
     children: [
       {
         path: "",
+        element: <SetBoxView />,
+      },
+      {
+        path: PATHS.BACKOFFICE.HOME + PATHS.BACKOFFICE.BOX,
         element: <BackofficeHomeView />,
       },
     ],

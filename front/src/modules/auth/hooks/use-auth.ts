@@ -17,13 +17,13 @@ const useAuth = () => {
     }
 
     // reemplazar por el id del box que elige el usuario.
-    const id = "10";
+    // const id = "10";
 
     const onSuccess = (data: {token: string, user: User}) => {
         console.log(data)
         setUser(data.user);
         setToken(data.token);
-        navigate(`${PATHS.BACKOFFICE.HOME.replace(':id', id)}`)
+        navigate(PATHS.BACKOFFICE.HOME)
     }
 
     const onError = () => {
