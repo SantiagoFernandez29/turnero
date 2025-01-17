@@ -1,10 +1,8 @@
 import {
   Box,
   Button,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
+  Typography,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -37,50 +35,58 @@ const LoginView = () => {
 
   return (
     <>
-    <Box className="bg-violet-700 flex flex-row w-full">
-        <Box className="flex flex-col items-center justify-center h-screen w-1/3 bg-violet-200">
-            <form
-            className="flex flex-col w-3/4 items-center gap-5 p-2"
+      <Box className="bg-violet-700 flex flex-row w-full">
+        <Box className="flex flex-col items-center justify-between h-screen w-1/3 p-2 pb-4 bg-violet-200">
+          <Box className="w-full">
+            <img src="/assets/images/municipalidad_de_campana_logo.jpeg" alt="Logo" className="rounded-sm w-1/6 max-h-6 object-cover" />
+          </Box>
+          <Box className="flex flex-col items-center gap-5">
+            <Typography variant="h3" style={{ fontWeight: "lighter", fontFamily: "inherit" }}>Turnero Municipal</Typography>
+          </Box>
+          <form
+            className="flex flex-col w-3/4 items-center gap-5"
             onSubmit={loginForm.handleSubmit(handleSubmit)}
-            >
+          >
             <Controller
-                name="user"
-                control={loginForm.control}
-                render={({ field }) => (
+              name="user"
+              control={loginForm.control}
+              render={({ field }) => (
                 <TextField
-                    {...field}
-                    label="Username"
-                    variant="outlined"
-                    error={!!loginForm.formState.errors.user}
-                    helperText={loginForm.formState.errors.user?.message}
-                    className="w-full"
+                  {...field}
+                  label="Username"
+                  variant="outlined"
+                  color="secondary"
+                  error={!!loginForm.formState.errors.user}
+                  helperText={loginForm.formState.errors.user?.message}
+                  className="w-full"
                 />
-                )}
+              )}
             />
             <Controller
-                name="password"
-                control={loginForm.control}
-                render={({ field }) => (
+              name="password"
+              control={loginForm.control}
+              render={({ field }) => (
                 <TextField
-                    {...field}
-                    label="Password"
-                    variant="outlined"
-                    type="password"
-                    error={!!loginForm.formState.errors.password}
-                    helperText={loginForm.formState.errors.password?.message}
-                    className="w-full"
+                  {...field}
+                  label="Password"
+                  variant="outlined"
+                  color="secondary"
+                  type="password"
+                  error={!!loginForm.formState.errors.password}
+                  helperText={loginForm.formState.errors.password?.message}
+                  className="w-full"
                 />
-                )}
+              )}
             />
-            <Button type="submit" variant="contained">
-                Login
+            <Button type="submit" variant="contained" className="w-1/2" color="secondary" style={{ fontWeight: "bold" }}>
+              Login
             </Button>
-            </form>
+          </form>
         </Box>
         <Box className=" bg-gradient-to-t from-violet-800 to-violet-400 w-2/3">
-            <img src="/assets/images/Municipalidad_de_Campana.jpg" alt="Login Image" className=" shadow-xl opacity-15 blur-sm" style={{ width: "1440px", height: "920px"}} />
+          <img src="/assets/images/Municipalidad_de_Campana.jpg" alt="Login Image" className=" shadow-xl opacity-15 blur-sm h-screen" style={{ width: "1440px"}} />
         </Box>
-    </Box>
+      </Box>
     </>
   );
 };

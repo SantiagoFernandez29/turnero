@@ -3,7 +3,7 @@ import PATHS from "../../../configs/constants/paths";
 import { LoginView } from "./imports";
 
 export const loginRoutes: RouteObject = {
-  path: PATHS.BACKOFFICE.LOGIN,
+  path: PATHS.GENERAL.LOGIN,
   element: <Outlet />,
   children: [
     {
