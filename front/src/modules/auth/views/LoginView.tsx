@@ -38,7 +38,7 @@ const LoginView = () => {
       <Box className="bg-violet-700 flex flex-row w-full">
         <Box className="flex flex-col items-center justify-between h-screen w-1/3 p-2 pb-4 bg-violet-200">
           <Box className="w-full">
-            <img src="/assets/images/municipalidad_de_campana_logo.jpeg" alt="Logo" className="rounded-sm w-1/6 max-h-5 object-cover" />
+            <img src="/assets/images/municipalidad_de_campana_logo.jpg" alt="Logo" className="rounded-sm w-1/6 max-h-7 object-cover" />
           </Box>
           <Box className="flex flex-col items-center gap-5">
             <Typography variant="h3" style={{ fontWeight: "lighter", fontFamily: "inherit" }}>Turnero Municipal</Typography>

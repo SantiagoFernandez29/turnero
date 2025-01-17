@@ -2,15 +2,15 @@ import { RouteObject } from "react-router";
 import PATHS from "../../../configs/constants/paths";
 import DefaultLayout from "../../shared/layout/DefaultLayout";
 import { TotemHomeView } from "./imports";
-import PublicRoute from "../../shared/components/routes/public-route";
 import AreasSection from "../views/AreasSection";
+import ProtectedRoute from "../../shared/components/routes/protected-route";
 
 export const totemRoutes: RouteObject = {
   path: PATHS.TOTEM.HOME,
   element: (
-    <PublicRoute>
+    <ProtectedRoute>
       <DefaultLayout />
-    </PublicRoute>
+    </ProtectedRoute>
   ),
   children: [
     {
