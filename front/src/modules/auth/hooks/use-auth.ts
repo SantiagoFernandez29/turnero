@@ -23,7 +23,7 @@ const useAuth = () => {
         console.log(data)
         setUser(data.user);
         setToken(data.token);
-        navigate(PATHS.BACKOFFICE.HOME)
+        navigate(data.user.terminalType)
     }
 
     const onError = () => {

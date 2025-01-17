@@ -7,8 +7,8 @@ const PATHS = {
         HOME: '/monitor',
     },
     BACKOFFICE: {
-        HOME: '/backoffice',
-        BOX: '/box/:id'
+        HOME: '/box',
+        BOX: '/:id'
     },
     GENERAL: {
         LOGIN: '/',
