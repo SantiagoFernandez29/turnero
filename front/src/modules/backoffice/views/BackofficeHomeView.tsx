@@ -1,8 +1,12 @@
 import { Box, Button, Typography } from "@mui/material";
-import { useLocation, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import useBackoffice from "../hooks/use-backoffice";
+import PATHS from "../../../configs/constants/paths";
+import { useEffect } from "react";
 
 const BackofficeHomeView = () => {
+  const navigate = useNavigate();
+
   const { id } = useParams<{ id: string }>();
   const {
     totalPendingTickets,
@@ -16,11 +20,9 @@ const BackofficeHomeView = () => {
 
   console.log(totalPendingTickets);
 
-  const { pathname  } = useLocation();
-
-    //Extraigo la segunda parte de la url, que indica si es un totem, monitor o backoffice
-    const pathArray = pathname.split('/');
-    console.log(pathArray);
+    useEffect(() => {
+      if (localStorage.getItem("box") === null || localStorage.getItem("box") !== id) navigate(PATHS.BACKOFFICE.HOME);
+    }, []);
 
   return (
     <Box className="flex flex-col items-center gap-10 m-5 w-full">

@@ -25,6 +25,7 @@ const SetBoxView = () => {
 
     const handleOnClickOption = (option: string) => {
         setId(option)
+        localStorage.setItem("box", option)
         setBoxSelected(true)
     }
 

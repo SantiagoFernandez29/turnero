@@ -32,6 +32,7 @@ const useAuth = () => {
     const logout = () => {
         setUser(null);
         setToken(null);
+        if (user?.terminalType === "box") localStorage.removeItem("box");
         navigate(PATHS.GENERAL.LOGIN);
     }
     
