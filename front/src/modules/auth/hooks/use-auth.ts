@@ -19,7 +19,7 @@ const useAuth = () => {
     const onSuccess = (data: {token: string, user: User}) => {
         console.log(data)
         setUser(data.user);
-        setToken(data.token);
+        setToken("bdf77d14e13b10286e45a00a233347d1f3da9c3dbf38b1322d404cb038ea");
         navigate(data.user.terminalType)
     }
 

@@ -14,7 +14,7 @@ const LoginView = () => {
   const { login } = useAuth();
 
   const loginFormSchema = z.object({
-    user: z.string().min(1, { message: "Invalid username" }),
+    username: z.string().min(1, { message: "Invalid username" }),
     password: z
       .string()
       .min(6, { message: "Password must be at least 6 characters long" }),
@@ -23,7 +23,7 @@ const LoginView = () => {
   const loginForm = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      user: "",
+      username: "",
       password: "",
     },
   });
@@ -48,7 +48,7 @@ const LoginView = () => {
             onSubmit={loginForm.handleSubmit(handleSubmit)}
           >
             <Controller
-              name="user"
+              name="username"
               control={loginForm.control}
               render={({ field }) => (
                 <TextField
@@ -56,8 +56,8 @@ const LoginView = () => {
                   label="Username"
                   variant="outlined"
                   color="secondary"
-                  error={!!loginForm.formState.errors.user}
-                  helperText={loginForm.formState.errors.user?.message}
+                  error={!!loginForm.formState.errors.username}
+                  helperText={loginForm.formState.errors.username?.message}
                   className="w-full"
                 />
               )}

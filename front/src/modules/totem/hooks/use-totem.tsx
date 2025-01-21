@@ -1,19 +1,30 @@
 import { useCallback, useState } from "react";
 import { io } from "socket.io-client";
 import { SOCKET_URL } from "../../../configs/constants/url";
-import { Area } from "../models/area";
 import { EVENTS } from "../../../configs/constants/events";
 import toast from "react-hot-toast";
+import { Procedure } from "../models/procedure";
+import useAuth from "../../auth/hooks/use-auth";
 
 
 const useTotem = () => {
 
+    const { token } = useAuth();
+
     const [turns, setTurns] = useState<number>(0);
     const [waitingCount, setWaitingCount] = useState<number>(0);
 
-    const socket = io(SOCKET_URL);
+    const socket = io("http://localhost:3000", {
+        auth: {
+            token: token,
+        },
+        autoConnect: false,
+        transports: ["websocket"],
+    });
 
     const connectToServer = useCallback(() => {
+        socket.connect();
+
         socket.on("connect", () => {
             console.log("Conectado al servidor");
         });
@@ -39,14 +50,14 @@ const useTotem = () => {
     
     }, [socket]);
 
-    const handleClickedArea = (area: Area) => {
+    const handleClickedArea = (area: Procedure) => {
         toast.success(`Seleccionó el área "${area.name}"`);
         const newTurn = turns + 1;
         setTurns(newTurn);
         
         socket.emit(EVENTS.TOTEM.SELECT_AREA, {
             areaTitle: area.name,
-            turn: area.description + newTurn,
+            turn: area.code + newTurn,
             emitedDate: new Date().toLocaleDateString("es-AR", {
                 year: "numeric",
                 month: "numeric",
@@ -59,6 +70,15 @@ const useTotem = () => {
         });
         const newWaitingCount = waitingCount + 1;
         setWaitingCount(newWaitingCount);
+
+        socket.emit("CREATE_TICKET", {
+            areaId: 1,
+            prioritary: true,
+            userIdentifier: "1",
+            procedureId: 1,
+          });
+
+
     };
 
     return { handleClickedArea, connectToServer };
