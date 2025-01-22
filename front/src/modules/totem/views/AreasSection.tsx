@@ -4,15 +4,17 @@ import useTotem from "../hooks/use-totem";
 import { useEffect } from "react";
 import { useProcedures } from "../hooks/use-procedures";
 import useAuth from "../../auth/hooks/use-auth";
-import { io } from "socket.io-client";
 
 const AreasSection = () => {
 
     const { user } = useAuth();
     const { data: areas } = useProcedures(user ? user?.areaId : -1);
-    
 
-    const { handleClickedArea } = useTotem();
+    const { handleClickedArea, connectToServer } = useTotem();
+
+    useEffect(() => {
+        connectToServer();
+    }, [connectToServer])
     
     return (
         <Box className="flex flex-col items-center gap-10 place-content-between m-5">

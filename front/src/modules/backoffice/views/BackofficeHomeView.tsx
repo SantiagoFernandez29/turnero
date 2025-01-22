@@ -9,16 +9,18 @@ const BackofficeHomeView = () => {
 
   const { id } = useParams<{ id: string }>();
   const {
-    totalPendingTickets,
-    boxPendingTickets,
-    ticketInService,
+    // totalPendingTickets,
+    // boxPendingTickets,
+    // ticketInService,
+    pendingTickets,
+    takenTickets,
     handleCallTicket,
-    handleSetTicketInService,
+    // handleSetTicketInService,
     handleFinishTicket,
     handleReiterateTicket,
   } = useBackoffice(id ? { id } : { id: "" });
 
-  console.log(totalPendingTickets);
+  // console.log(totalPendingTickets);
 
     useEffect(() => {
       if (localStorage.getItem("box") === null || localStorage.getItem("box") !== id) navigate(PATHS.BACKOFFICE.HOME);
@@ -33,8 +35,8 @@ const BackofficeHomeView = () => {
         <Box className="flex flex-col gap-5 bg-indigo-200 p-8 border-2 border-indigo-300 rounded-lg shadow-lg">
           <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold" }}>Pendientes</Typography>
           <Box className=" flex flex-col gap-10">
-            {totalPendingTickets.length >= 1 &&
-              totalPendingTickets.slice(0, 5).map((ticket, index) => (
+            {pendingTickets.length >= 1 &&
+              pendingTickets.slice(0, 5).map((ticket, index) => (
                 <Box
                   key={index}
                   className={index === 0 ? "flex flex-row items-center justify-between bg-lime-300 p-2 rounded-lg shadow-lg w-" : "flex flex-row items-center justify-between bg-indigo-100 p-2 rounded-lg shadow-lg"}
@@ -43,7 +45,7 @@ const BackofficeHomeView = () => {
                     key={index}
                     style={index === 0 ? { fontWeight: "bold", color: "green" } : { fontWeight: "lighter" }}
                   >
-                    {ticket.turn}
+                    {ticket.code}
                   </Typography>
                   <Button
                     variant="contained"
@@ -55,7 +57,7 @@ const BackofficeHomeView = () => {
                   </Button>
                 </Box>
               ))}
-            {totalPendingTickets.length === 0 &&
+            {pendingTickets.length === 0 &&
               <Typography className="text-center" style={{ fontWeight: "lighter", color: "red" }}>
                 No hay tickets pendientes
               </Typography>
@@ -101,17 +103,17 @@ const BackofficeHomeView = () => {
         <Box className="flex flex-col gap-5 bg-indigo-200 p-8 border-2 border-indigo-300 rounded-lg shadow-lg">
           <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold" }}>Recibido</Typography>
           <Box className="flex flex-col gap-10">
-            {ticketInService !== null ? (
+            {takenTickets.length > 0 ? (
               <Box className="flex flex-col gap-5">
                 <Box className="flex flex-row items-center justify-between bg-red-400 p-2 rounded-lg shadow-lg gap-4">
                   <Typography style={{ fontWeight: "bold", color: "red" }}>
-                    {ticketInService.turn}
+                    {takenTickets[0]?.code}
                   </Typography>
                   <Button
                     variant="contained"
                     color="error"
                     style={{ fontWeight: "bold" }}
-                    onClick={() => handleFinishTicket(ticketInService)}
+                    onClick={() => handleFinishTicket(takenTickets[0])}
                   >
                     Finalizar
                   </Button>
@@ -124,11 +126,11 @@ const BackofficeHomeView = () => {
                   </Button>
                 </Box>
                 <Box className="flex flex-col gap-3 bg-slate-50 p-2 rounded-lg shadow-lg">
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Turno: {ticketInService?.turn}</Typography>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Área: {ticketInService?.areaTitle}</Typography>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Fecha: {ticketInService?.emitedDate}</Typography>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Cantidad de espera: {ticketInService?.waitingCount}</Typography>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Voucher: {ticketInService?.voucher}</Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Turno: {takenTickets[0]?.code}</Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Área: {takenTickets[0]?.area}</Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Fecha: {takenTickets[0]?.takenAt}</Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Cantidad de espera: {0}</Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Voucher: {0}</Typography>
                 </Box>
               </Box>
             ) : (

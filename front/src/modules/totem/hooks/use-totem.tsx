@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
-import { io } from "socket.io-client";
+import { useCallback, useRef, useState } from "react";
+import { io, Socket } from "socket.io-client";
 import { SOCKET_URL } from "../../../configs/constants/url";
 import { EVENTS } from "../../../configs/constants/events";
 import toast from "react-hot-toast";
@@ -8,19 +8,19 @@ import useAuth from "../../auth/hooks/use-auth";
 
 
 const useTotem = () => {
-
     const { token } = useAuth();
 
     const [turns, setTurns] = useState<number>(0);
     const [waitingCount, setWaitingCount] = useState<number>(0);
-
-    const socket = io("http://localhost:3000", {
-        auth: {
-            token: token,
-        },
-        autoConnect: false,
-        transports: ["websocket"],
-    });
+    const { current: socket} = useRef<Socket>(
+        io(SOCKET_URL, {
+            auth: {
+                token: token,
+            },
+            autoConnect: false,
+            transports: ["websocket"],
+        })
+    );
 
     const connectToServer = useCallback(() => {
         socket.connect();
@@ -42,9 +42,6 @@ const useTotem = () => {
         });
     
         return () => {
-            socket.off("connect");
-            socket.off("disconnect");
-            //ver de sacar el disconnect
             socket.disconnect();
         }
     
