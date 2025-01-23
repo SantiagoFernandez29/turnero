@@ -2,9 +2,9 @@ import { Box, Typography } from "@mui/material";
 import useMonitor from "../hooks/use-monitor";
 
 const AttentionList = () => {
-  const { pendingTickets, ticketsReadyToService } = useMonitor();
+  const { pendingTickets, takenTickets } = useMonitor();
 
-  console.log("ticketsReadyToService", ticketsReadyToService);
+  console.log("ticketsReadyToService", takenTickets);
 
   return (
     <Box className="flex flex-row gap-3 w-1/2 justify-center">
@@ -14,18 +14,18 @@ const AttentionList = () => {
           {
             pendingTickets.length > 0 && pendingTickets.slice(0,8).reverse().map((ticket, index) => (
                 <Typography key={index} variant="h4" style={{ fontWeight: "lighter", textAlign: "center", backgroundColor: "white", padding: "5px" }}>
-                  {ticket.turn}
+                  {ticket.code}
                 </Typography>
               )
             )
           }
           {
-            ticketsReadyToService.length > 0 ? ticketsReadyToService.map((ticket, index) => (
+            takenTickets.length > 0 ? takenTickets.map((ticket, index) => (
               <Typography key={index} variant="h3" className="bg-violet-600" style={{ fontWeight: "bold", textAlign: "center", color: "white", padding: "5px"  }}>
-                {ticket.turn}
+                {ticket.code}
               </Typography>
             )
-          ) : pendingTickets.length === 0 && ticketsReadyToService.length === 0 ? 
+          ) : pendingTickets.length === 0 && takenTickets.length === 0 ? 
             <Typography variant="h6" style={{ fontWeight: "bold", textAlign: "center", backgroundColor: "red", color: "white", padding: "5px"}}>
               No hay turnos pendientes
             </Typography>
@@ -45,12 +45,12 @@ const AttentionList = () => {
             )
           }
           {
-            ticketsReadyToService.length > 0 ? ticketsReadyToService.map((ticket, index) => (
+            takenTickets.length > 0 ? takenTickets.map((ticket, index) => (
               <Typography key={index}  variant="h3" className="bg-violet-600" style={{ fontWeight: "bold", textAlign: "center", color: "white", padding: "5px"}}>
                 {ticket.box.name}
               </Typography>
             )
-          ) : pendingTickets.length === 0 && ticketsReadyToService.length === 0 ? 
+          ) : pendingTickets.length === 0 && takenTickets.length === 0 ? 
             <Typography variant="h6" style={{ fontWeight: "bold", textAlign: "center", backgroundColor: "red", color: "white", padding: "5px"}}>
               No hay turnos pendientes
             </Typography>

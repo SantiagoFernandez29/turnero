@@ -14,6 +14,8 @@ const BackofficeHomeView = () => {
     // ticketInService,
     pendingTickets,
     takenTickets,
+    ticketRecalled,
+    timer,
     handleCallTicket,
     // handleSetTicketInService,
     handleFinishTicket,
@@ -22,9 +24,9 @@ const BackofficeHomeView = () => {
 
   // console.log(totalPendingTickets);
 
-    useEffect(() => {
-      if (localStorage.getItem("box") === null || localStorage.getItem("box") !== id) navigate(PATHS.BACKOFFICE.HOME);
-    }, []);
+  useEffect(() => {
+    if (localStorage.getItem("box") === null || localStorage.getItem("box") !== id) navigate(PATHS.BACKOFFICE.HOME);
+  }, []);
 
   return (
     <Box className="flex flex-col items-center gap-10 m-5 w-full">
@@ -113,22 +115,37 @@ const BackofficeHomeView = () => {
                     variant="contained"
                     color="error"
                     style={{ fontWeight: "bold" }}
-                    onClick={() => handleFinishTicket(takenTickets[0])}
+                    onClick={() => handleFinishTicket(takenTickets[0].uid, "FINISH")}
                   >
                     Finalizar
                   </Button>
                   <Button
                     variant="contained"
                     color="secondary"
-                    onClick={() => handleReiterateTicket()}
+                    onClick={() => handleReiterateTicket(takenTickets[0].uid)}
+                    disabled={ticketRecalled}
                   >
-                    Reiterar
+                    {ticketRecalled ? `${timer}` : "Reiterar"}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    style={{ fontWeight: "bold" }}
+                    onClick={() => handleFinishTicket(takenTickets[0].uid, "CANCEL")}
+                  >
+                    Cancelar
                   </Button>
                 </Box>
                 <Box className="flex flex-col gap-3 bg-slate-50 p-2 rounded-lg shadow-lg">
                   <Typography variant="h6" style={{ fontWeight: "bold" }}>Turno: {takenTickets[0]?.code}</Typography>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Área: {takenTickets[0]?.area}</Typography>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Fecha: {takenTickets[0]?.takenAt}</Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Área: {takenTickets[0]?.procedure}</Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Fecha: {`${new Date(takenTickets[0]?.takenAt).toLocaleDateString('ES-es', {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}`}</Typography>
                   <Typography variant="h6" style={{ fontWeight: "bold" }}>Cantidad de espera: {0}</Typography>
                   <Typography variant="h6" style={{ fontWeight: "bold" }}>Voucher: {0}</Typography>
                 </Box>

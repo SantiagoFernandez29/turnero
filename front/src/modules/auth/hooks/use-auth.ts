@@ -20,8 +20,9 @@ const useAuth = () => {
         console.log(data)
         setUser(data.user);
         // setToken("bdf77d14e13b10286e45a00a233347d1f3da9c3dbf38b1322d404cb038ea");
-        setToken("f9a9f72c63445393bb96cecda8700ffbea5c3f30c79636fb3517fe555fa6");
-        navigate("/box")
+        // setToken("f9a9f72c63445393bb96cecda8700ffbea5c3f30c79636fb3517fe555fa6");
+        setToken("9c1ffa167b3006df0f392031992d1e71d09b6afb7df96c7bda6eadbbcd1c");
+        navigate("monitor");
         // navigate(data.user.terminalType)
     }
 

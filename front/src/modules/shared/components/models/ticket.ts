@@ -18,6 +18,7 @@ export type Ticket = {
     name: string;
   };
   code: string;
+  procedure: string;
   prioritary: boolean;
   procedureId: number;
   takenAt: string;

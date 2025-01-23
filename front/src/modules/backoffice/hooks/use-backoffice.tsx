@@ -15,6 +15,9 @@ const useBackoffice = ({ id }: { id: string }) => {
 
     const [pendingTickets, setPendingTickets] = useState<Ticket[]>([]);
     const [takenTickets, setTakenTickets] = useState<Ticket[]>([]);
+    const [ticketRecalled, setTicketRecalled] = useState<boolean>(false);
+    const [timer, setTimer] = useState<number>(20);
+
 
     const { token } = useAuth();
 
@@ -42,18 +45,18 @@ const useBackoffice = ({ id }: { id: string }) => {
             console.warn("Socket desconectado:", reason);
         });
 
-        socket.on('BOX_INIT', (data) => {
+        socket.on('TERMINAL_STATUS', (data) => {
             setPendingTickets(data.pendingTickets);
             setTakenTickets(data.takenTickets);
         })
 
-        socket.on('PENDING_TICKETS', (tickets: Ticket[]) => {
-            setPendingTickets(tickets);
-        });
+        // socket.on('PENDING_TICKETS', (tickets: Ticket[]) => {
+        //     setPendingTickets(tickets);
+        // });
 
-        socket.on('TAKEN_TICKETS', (tickets: Ticket[]) => {
-            setTakenTickets(tickets);
-        });
+        // socket.on('TAKEN_TICKETS', (tickets: Ticket[]) => {
+        //     setTakenTickets(tickets);
+        // });
 
         // socket.on(EVENTS.BACKOFFICE.TICKET_GENERATED, (ticket: Ticket) => {
         //     // console.log("Nuevo ticket generado en el totem", ticket);
@@ -71,6 +74,20 @@ const useBackoffice = ({ id }: { id: string }) => {
 
     }, [socket])
 
+    useEffect(() => {
+        let interval: NodeJS.Timeout
+        if (timer >= 0) {
+            interval = setInterval(() => {
+                setTimer((prev) => prev - 1)
+            }, 1000)
+        } else {
+            setTicketRecalled(false)
+            setTimer(20)
+        }
+
+        return () => clearInterval(interval)
+    }, [timer])
+
     const playSound = () => {
         new Audio(sound_effect).play();
     }
@@ -80,7 +97,7 @@ const useBackoffice = ({ id }: { id: string }) => {
             toast.error("Ya hay un ticket en servicio");
             return;
         }
-    
+
         const payload = {
             areaId: ticket.areaId,
             ticketUid: ticket.uid,
@@ -136,22 +153,28 @@ const useBackoffice = ({ id }: { id: string }) => {
     //     }
     // }
 
-    const handleReiterateTicket = () => {
-        socket.emit(EVENTS.BACKOFFICE.RECALLING_TICKET_ALARM);
+    const handleReiterateTicket = (ticketUid: number) => {
+        // socket.emit(EVENTS.BACKOFFICE.RECALLING_TICKET_ALARM);
+        setTicketRecalled(true);
+        const payload = {
+            ticketUid
+        }
+        socket.emit("RECALL_TICKET", payload)
     }
 
-    const handleFinishTicket = (ticket: Ticket) => {
+    const handleFinishTicket = (ticketUid: number, type: string) => {
         // toast.success(`Cliente con Ticket ${ticket.turn} recibido`);
         // setTicketInService(null);
-        socket.emit(EVENTS.BACKOFFICE.FINISH_TICKET, ticket);
+        // socket.emit(EVENTS.BACKOFFICE.FINISH_TICKET, ticket);
         const payload = {
-            ticketUid: ticket.uid,
-            type: "FINISH",
-          }
-          socket.emit("FINISH_TICKET", payload)
+            ticketUid,
+            type,
+        }
+        console.log("Finalizando ticket", payload);
+        socket.emit("FINISH_TICKET", payload)
     }
 
-    return { pendingTickets, boxPendingTickets, takenTickets, handleCallTicket, setPendingTickets, setTakenTickets, handleFinishTicket, handleReiterateTicket };
+    return { pendingTickets, boxPendingTickets, takenTickets, ticketRecalled, timer, handleCallTicket, setPendingTickets, setTakenTickets, handleFinishTicket, handleReiterateTicket };
 }
 
 export default useBackoffice;

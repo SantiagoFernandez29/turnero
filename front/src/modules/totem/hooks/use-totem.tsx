@@ -8,7 +8,7 @@ import useAuth from "../../auth/hooks/use-auth";
 
 
 const useTotem = () => {
-    const { token } = useAuth();
+    const { token, user } = useAuth();
 
     const [turns, setTurns] = useState<number>(0);
     const [waitingCount, setWaitingCount] = useState<number>(0);
@@ -26,12 +26,16 @@ const useTotem = () => {
         socket.connect();
 
         socket.on("connect", () => {
-            console.log("Conectado al servidor");
-        });
-    
-        socket.on("disconnect", () => {
-            console.log("Desconectado del servidor");
-        });
+            console.log("Conectado al servidor WebSocket")
+          });
+          
+          socket.on("disconnect", (reason) => {
+            console.warn("Socket desconectado:", reason);
+          });
+
+          socket.on("TERMINAL_STATUS", (areas: any[]) => {
+            console.log("Areas:", areas);
+          });
 
         socket.on(EVENTS.GENERAL.FINISH_TICKET, (pendingTickets) => {
             if(pendingTickets.length === 0){
@@ -47,33 +51,35 @@ const useTotem = () => {
     
     }, [socket]);
 
-    const handleClickedArea = (area: Procedure) => {
-        toast.success(`Seleccionó el área "${area.name}"`);
-        const newTurn = turns + 1;
-        setTurns(newTurn);
+    const handleClickedArea = (tramite: Procedure) => {
+        toast.success(`Seleccionó el trámite "${tramite.name}"`);
+        // const newTurn = turns + 1;
+        // setTurns(newTurn);
         
-        socket.emit(EVENTS.TOTEM.SELECT_AREA, {
-            areaTitle: area.name,
-            turn: area.code + newTurn,
-            emitedDate: new Date().toLocaleDateString("es-AR", {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit"
-            }),
-            waitingCount: waitingCount,
-            voucher: "000000",
-        });
-        const newWaitingCount = waitingCount + 1;
-        setWaitingCount(newWaitingCount);
+        // socket.emit(EVENTS.TOTEM.SELECT_AREA, {
+        //     areaTitle: area.name,
+        //     turn: area.code + newTurn,
+        //     emitedDate: new Date().toLocaleDateString("es-AR", {
+        //         year: "numeric",
+        //         month: "numeric",
+        //         day: "numeric",
+        //         hour: "2-digit",
+        //         minute: "2-digit"
+        //     }),
+        //     waitingCount: waitingCount,
+        //     voucher: "000000",
+        // });
+        // const newWaitingCount = waitingCount + 1;
+        // setWaitingCount(newWaitingCount);
 
-        socket.emit("CREATE_TICKET", {
-            areaId: 1,
+        const payload = {
+            areaId: tramite.areaId,
             prioritary: true,
-            userIdentifier: "1",
-            procedureId: 1,
-          });
+            userIdentifier: String(user?.id || -1),
+            procedureId: tramite.id,
+          };
+      
+        socket.emit("CREATE_TICKET", payload);
 
 
     };
