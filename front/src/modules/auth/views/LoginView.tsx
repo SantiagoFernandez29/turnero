@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   TextField,
   Typography,
 } from "@mui/material";
@@ -9,9 +8,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useAuth from "../hooks/use-auth";
 import { LoginCredentials } from "../models/login-credentials";
+import LoadingButton from "../../shared/components/ui/loading-button";
 
 const LoginView = () => {
-  const { login } = useAuth();
+  const { login, isLoading, isSuccess } = useAuth();
 
   const loginFormSchema = z.object({
     username: z.string().min(1, { message: "Invalid username" }),
@@ -30,7 +30,7 @@ const LoginView = () => {
 
   const handleSubmit = (credentials: LoginCredentials) => {
     login(credentials);
-    loginForm.reset();
+    if (isSuccess) loginForm.reset();
   };
 
   return (
@@ -59,6 +59,7 @@ const LoginView = () => {
                   error={!!loginForm.formState.errors.username}
                   helperText={loginForm.formState.errors.username?.message}
                   className="w-full"
+                  disabled={isLoading}
                 />
               )}
             />
@@ -75,16 +76,18 @@ const LoginView = () => {
                   error={!!loginForm.formState.errors.password}
                   helperText={loginForm.formState.errors.password?.message}
                   className="w-full"
+                  disabled={isLoading}
                 />
               )}
             />
-            <Button type="submit" variant="contained" className="w-1/2" color="secondary" style={{ fontWeight: "lighter", fontFamily: "inherit" }}>
+            <LoadingButton type="submit" variant="contained" className="w-1/2" color="secondary" style={{ fontWeight: "lighter", fontFamily: "inherit" }} isLoading={isLoading}>
               Login
-            </Button>
+            </LoadingButton>
+
           </form>
         </Box>
         <Box className=" bg-gradient-to-t from-violet-800 to-violet-400 w-2/3">
-          <img src="/assets/images/Municipalidad_de_Campana.jpg" alt="Login Image" className=" shadow-xl opacity-15 blur-sm h-screen" style={{ width: "1440px"}} />
+          <img src="/assets/images/Municipalidad_de_Campana.jpg" alt="Login Image" className=" shadow-xl opacity-15 blur-sm h-screen" style={{ width: "1440px" }} />
         </Box>
       </Box>
     </>

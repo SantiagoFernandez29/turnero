@@ -5,14 +5,16 @@ import { EVENTS } from "../../../configs/constants/events";
 import toast from "react-hot-toast";
 import { Procedure } from "../models/procedure";
 import useAuth from "../../auth/hooks/use-auth";
+import { AreaDto } from "../dto/area";
 
 
 const useTotem = () => {
     const { token, user } = useAuth();
 
-    const [turns, setTurns] = useState<number>(0);
-    const [waitingCount, setWaitingCount] = useState<number>(0);
-    const { current: socket} = useRef<Socket>(
+    const [area, setArea] = useState<string>("");
+    const [showHomeView, setShowHomeView] = useState<boolean>(true);
+
+    const { current: socket } = useRef<Socket>(
         io(SOCKET_URL, {
             auth: {
                 token: token,
@@ -25,66 +27,43 @@ const useTotem = () => {
     const connectToServer = useCallback(() => {
         socket.connect();
 
-        socket.on("connect", () => {
+        socket.on(EVENTS.GENERAL.CONNECT, () => {
             console.log("Conectado al servidor WebSocket")
-          });
-          
-          socket.on("disconnect", (reason) => {
-            console.warn("Socket desconectado:", reason);
-          });
-
-          socket.on("TERMINAL_STATUS", (areas: any[]) => {
-            console.log("Areas:", areas);
-          });
-
-        socket.on(EVENTS.GENERAL.FINISH_TICKET, (pendingTickets) => {
-            if(pendingTickets.length === 0){
-                setWaitingCount(0)
-            } else {
-                setWaitingCount(pendingTickets.length);
-            }
         });
-    
+
+        socket.on(EVENTS.GENERAL.DISCONNECT, (reason) => {
+            console.warn("Socket desconectado:", reason);
+        });
+
+        socket.on(EVENTS.GENERAL.TERMINAL_STATUS, (areas: AreaDto) => {
+            setArea(areas.areas[0].name);
+        });
+
+        socket.on(EVENTS.GENERAL.MAX_PENDING_QUEUE_ALERT_ON, () => {
+            toast.error("La cola de espera está llena. Por favor, vuelva más tarde.");
+            setShowHomeView(true);
+        });
+
         return () => {
             socket.disconnect();
         }
-    
+
     }, [socket]);
 
     const handleClickedArea = (tramite: Procedure) => {
-        toast.success(`Seleccionó el trámite "${tramite.name}"`);
-        // const newTurn = turns + 1;
-        // setTurns(newTurn);
-        
-        // socket.emit(EVENTS.TOTEM.SELECT_AREA, {
-        //     areaTitle: area.name,
-        //     turn: area.code + newTurn,
-        //     emitedDate: new Date().toLocaleDateString("es-AR", {
-        //         year: "numeric",
-        //         month: "numeric",
-        //         day: "numeric",
-        //         hour: "2-digit",
-        //         minute: "2-digit"
-        //     }),
-        //     waitingCount: waitingCount,
-        //     voucher: "000000",
-        // });
-        // const newWaitingCount = waitingCount + 1;
-        // setWaitingCount(newWaitingCount);
-
         const payload = {
             areaId: tramite.areaId,
             prioritary: true,
             userIdentifier: String(user?.id || -1),
             procedureId: tramite.id,
-          };
-      
-        socket.emit("CREATE_TICKET", payload);
+        };
 
-
+        socket.emit(EVENTS.TOTEM.CREATE_TICKET, payload);
+        toast.success(`Seleccionó el trámite "${tramite.name}"`);
+        setShowHomeView(true)
     };
 
-    return { handleClickedArea, connectToServer };
+    return { handleClickedArea, connectToServer, setShowHomeView, showHomeView, area };
 };
 
 export default useTotem;

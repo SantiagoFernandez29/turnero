@@ -10,3 +10,19 @@ p {
 .font-sans {
   font-family: 'Quicksand', sans-serif;
 }
+
+@keyframes flash {
+  0% {
+    background-color: #7C3AED;
+  }
+  50% {
+    background-color: #ff007b; /* Color 2 */
+  }
+  100% {
+    background-color: #7C3AED; /* Color 1 */
+  }
+}
+
+.flash-animation {
+  animation: flash 1s ease-in-out infinite;
+}

@@ -1,15 +1,3 @@
-// export type Ticket = {
-//   areaTitle: string;
-//   turn: string;
-//   emitedDate: string;
-//   waitingCount: number;
-//   voucher: string;
-//   box: {
-//     id: number;
-//     name: string;
-//   };
-// };
-
 export type Ticket = {
   area: string;
   areaId: number;

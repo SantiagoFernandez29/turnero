@@ -1,7 +1,6 @@
 const PATHS = {
     TOTEM: {
         HOME: '/totem',
-        AREAS: '/totem/areas',
     },
     MONITOR: {
         HOME: '/monitor',

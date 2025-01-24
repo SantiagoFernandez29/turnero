@@ -16,7 +16,11 @@ const useAuth = () => {
         mutation.mutate(credentials);
     }
 
+    //cuando se loguea correctamente reseteo el formulario
+
+
     const onSuccess = (data: {token: string, user: User}) => {
+
         console.log(data)
         setUser(data.user);
         // setToken("bdf77d14e13b10286e45a00a233347d1f3da9c3dbf38b1322d404cb038ea");
@@ -43,7 +47,9 @@ const useAuth = () => {
         login,
         logout,
         user,
-        token
+        token,
+        isLoading: mutation.isPending,
+        isSuccess: mutation.isSuccess,
     }
 }
 

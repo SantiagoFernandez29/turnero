@@ -10,11 +10,13 @@ import useAuth from "../../auth/hooks/use-auth";
 const useMonitor = () => {
 
     const { token } = useAuth();
-    // const [pendingTickets, setPendingTickets] = useState<Ticket[]>([]);
-    // const [ticketsReadyToService, setTicketsReadyToService] = useState<Ticket[]>([]);
 
     const [pendingTickets, setPendingTickets] = useState<Ticket[]>([]);
-  const [takenTickets, setTakenTickets] = useState<Ticket[]>([]);
+    const [takenTickets, setTakenTickets] = useState<Ticket[]>([]);
+    const [ticketRecalled, setTicketRecalled] = useState<boolean>(false);
+    const [recalledTicketUid, setRecalledTicketUid] = useState<number | null>(null);
+
+    console.log("recalledTicketUid", recalledTicketUid);
 
     const { current: socket } = useRef<Socket>(
         io(SOCKET_URL, {
@@ -30,42 +32,28 @@ const useMonitor = () => {
 
         socket.connect();
 
-        socket.on("connect", () => {
+        socket.on(EVENTS.GENERAL.CONNECT, () => {
             console.log("Conectado al servidor WebSocket")
         });
 
-        socket.on("disconnect", (reason) => {
+        socket.on(EVENTS.GENERAL.DISCONNECT, (reason) => {
             console.warn("Socket desconectado:", reason);
         });
 
-        socket.on("TERMINAL_STATUS", (data) => {
+        socket.on(EVENTS.GENERAL.TERMINAL_STATUS, (data) => {
             console.log(data);
             setPendingTickets(data.pendingTickets);
             setTakenTickets(data.takenTickets);
         });
 
-        // socket.on(EVENTS.MONITOR.TICKET_GENERATED, (ticket: Ticket) => {
-        //     setPendingTickets((prevTickets) => [...prevTickets, ticket]);
-        //     console.log("Ticket del backoffice: ", ticket);
-        //     console.log("Tickets pendientes: ", pendingTickets);
-        // });
-
-        // socket.on(EVENTS.MONITOR.FINISH_TICKET, (ticket: Ticket) => {
-        //     setTicketsReadyToService((prevTickets) => prevTickets.filter((t) => t.turn !== ticket.turn));
-        // });
-
-        // socket.on(EVENTS.MONITOR.TICKET_CALLED, (ticket: Ticket) => {
-        //     setTicketsReadyToService((prevTickets) => [...prevTickets, ticket]);
-        //     setPendingTickets((prevTickets) => prevTickets.filter((t) => t.turn !== ticket.turn));
-        //     new Audio(sound_effect).play();
-        // });
-
-        socket.on(EVENTS.MONITOR.RECALLING_TICKET_ALARM, () => {
+        socket.on(EVENTS.MONITOR.RECALL_TICKET, (ticket: Ticket) => {
+            setTicketRecalled(true);
             new Audio(sound_effect).play();
-        });
-
-        socket.on("RECALL_TICKET", () => {
-            // play();
+            setTimeout(() => {
+                setTicketRecalled(false);
+            }, 5000);
+            setRecalledTicketUid(ticket.uid);
+            console.log(ticket);
         });
 
         return () => {
@@ -74,7 +62,7 @@ const useMonitor = () => {
 
     }, [socket]);
 
-    return { pendingTickets, takenTickets };
+    return { pendingTickets, takenTickets, ticketRecalled, recalledTicketUid };
 }
 
 export default useMonitor;

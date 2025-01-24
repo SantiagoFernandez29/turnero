@@ -1,4 +1,4 @@
-import { Area } from "../../modules/totem/models/area";
+import { Area } from "../../modules/totem/models/zona";
 
 export const AREAS: Area[] = [
     {
