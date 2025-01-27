@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { SOCKET_URL } from "../../../configs/constants/url";
 import { EVENTS } from "../../../configs/constants/events";
@@ -9,7 +9,7 @@ import { AreaDto } from "../dto/area";
 
 
 const useTotem = () => {
-    const { token, user } = useAuth();
+    const { token } = useAuth();
 
     const [area, setArea] = useState<string>("");
     const [showHomeView, setShowHomeView] = useState<boolean>(true);
@@ -24,7 +24,7 @@ const useTotem = () => {
         })
     );
 
-    const connectToServer = useCallback(() => {
+    useEffect(() => {
         socket.connect();
 
         socket.on(EVENTS.GENERAL.CONNECT, () => {
@@ -54,7 +54,6 @@ const useTotem = () => {
         const payload = {
             areaId: tramite.areaId,
             prioritary: true,
-            // userIdentifier: String(user?.id || -1),
             procedureId: tramite.id,
         };
 
@@ -63,7 +62,7 @@ const useTotem = () => {
         setShowHomeView(true)
     };
 
-    return { handleClickedArea, connectToServer, setShowHomeView, showHomeView, area };
+    return { handleClickedArea, setShowHomeView, showHomeView, area };
 };
 
 export default useTotem;

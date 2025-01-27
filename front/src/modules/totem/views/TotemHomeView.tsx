@@ -1,7 +1,7 @@
 import AreaButton from "../components/AreaButton";
 import { Box, Button, Typography } from "@mui/material";
 import useTotem from "../hooks/use-totem";
-import React, { useEffect } from "react";
+import React from "react";
 import { useProcedures } from "../hooks/use-procedures";
 import useAuth from "../../auth/hooks/use-auth";
 
@@ -9,11 +9,7 @@ const TotemHomeView = () => {
 
     const { user, token } = useAuth();
     const { data: tramites } = useProcedures(token ? token : "", user ? user.areaId : -1);
-    const { handleClickedArea, connectToServer, setShowHomeView, showHomeView, area } = useTotem();
-
-    useEffect(() => {
-        connectToServer();
-    }, [connectToServer])
+    const { handleClickedArea, setShowHomeView, showHomeView, area } = useTotem();
 
     return (
         <React.Fragment>
