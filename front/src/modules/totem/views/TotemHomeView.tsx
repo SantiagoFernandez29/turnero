@@ -7,8 +7,8 @@ import useAuth from "../../auth/hooks/use-auth";
 
 const TotemHomeView = () => {
 
-    const { user } = useAuth();
-    const { data: tramites } = useProcedures(user ? user?.areaId : -1);
+    const { user, token } = useAuth();
+    const { data: tramites } = useProcedures(token ? token : "", user ? user.areaId : -1);
     const { handleClickedArea, connectToServer, setShowHomeView, showHomeView, area } = useTotem();
 
     useEffect(() => {

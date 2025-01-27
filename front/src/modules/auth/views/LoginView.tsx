@@ -14,10 +14,10 @@ const LoginView = () => {
   const { login, isLoading, isSuccess } = useAuth();
 
   const loginFormSchema = z.object({
-    username: z.string().min(1, { message: "Invalid username" }),
+    username: z.string().min(1, { message: "Nombre de usuario inválido." }),
     password: z
       .string()
-      .min(6, { message: "Password must be at least 6 characters long" }),
+      .min(6, { message: "Contraseña inválida." }),
   });
 
   const loginForm = useForm<z.infer<typeof loginFormSchema>>({

@@ -54,7 +54,7 @@ const useTotem = () => {
         const payload = {
             areaId: tramite.areaId,
             prioritary: true,
-            userIdentifier: String(user?.id || -1),
+            // userIdentifier: String(user?.id || -1),
             procedureId: tramite.id,
         };
 

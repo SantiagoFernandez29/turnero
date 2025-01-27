@@ -31,6 +31,9 @@ const useBackoffice = ({ id }: { id: string }) => {
             auth: {
                 token: token,
             },
+            query: {
+                boxId: localStorage.getItem("box"),
+            },
             autoConnect: false,
             transports: ["websocket"],
         })
@@ -56,10 +59,10 @@ const useBackoffice = ({ id }: { id: string }) => {
 
         socket.on(EVENTS.BACKOFFICE.RECALL_TICKET, (data) => {
             console.log("Ticket recordado")
-            console.log(data.message)
+            console.log(data)
         })
 
-        socket.on(EVENTS.BACKOFFICE.TICKET_FINISHED, (data: {ticketUid: number, type: string}) => {
+        socket.on(EVENTS.BACKOFFICE.TICKET_FINISHED, (data: {ticketId: number, type: string}) => {
             setIsLoading((prev) => ({...prev, [data.type]: false}))
         })
 
@@ -83,10 +86,6 @@ const useBackoffice = ({ id }: { id: string }) => {
         return () => clearInterval(interval)
     }, [timer])
 
-    // const playSound = () => {
-    //     new Audio(sound_effect).play();
-    // }
-
     const handleCallTicket = (ticket: Ticket) => {
         if (takenTickets.length > 0) {
             toast.error("Ya hay un ticket en servicio");
@@ -94,23 +93,22 @@ const useBackoffice = ({ id }: { id: string }) => {
         }
         const payload = {
             areaId: ticket.areaId,
-            ticketUid: ticket.uid,
-            prioritary: ticket.prioritary,
+            ticketId: ticket.id,
         }
         socket.emit(EVENTS.BACKOFFICE.TAKE_TICKET, payload);
     }
 
-    const handleReiterateTicket = (ticketUid: number) => {
+    const handleReiterateTicket = (ticketId: number) => {
         setTicketRecalled(true);
         const payload = {
-            ticketUid
+            ticketId
         }
         socket.emit(EVENTS.BACKOFFICE.RECALL_TICKET, payload)
     }
 
-    const handleFinishTicket = (ticketUid: number, type: string) => {
+    const handleFinishTicket = (ticketId: number, type: string) => {
         const payload = {
-            ticketUid,
+            ticketId,
             type,
         }
         setIsLoading((prev) => ({...prev, [type]: true}));

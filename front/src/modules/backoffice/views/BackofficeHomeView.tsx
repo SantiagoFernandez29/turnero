@@ -76,7 +76,7 @@ const BackofficeHomeView = () => {
                     variant="contained"
                     color="error"
                     style={{ fontWeight: "bold" }}
-                    onClick={() => handleFinishTicket(takenTickets[0].uid, "FINISH")}
+                    onClick={() => handleFinishTicket(takenTickets[0].id, "FINISH")}
                     isLoading={isLoading["FINISH"]}
                     disabled={ticketRecalled || isLoading["CANCEL"] || isLoading["FINISH"]}
                   >
@@ -85,7 +85,7 @@ const BackofficeHomeView = () => {
                   <Button
                     variant="contained"
                     color="secondary"
-                    onClick={() => handleReiterateTicket(takenTickets[0].uid)}
+                    onClick={() => handleReiterateTicket(takenTickets[0].id)}
                     disabled={ticketRecalled || isLoading["CANCEL"] || isLoading["FINISH"]}
                   >
                     {ticketRecalled ? `${timer}` : "Reiterar"}
@@ -94,7 +94,7 @@ const BackofficeHomeView = () => {
                     variant="contained"
                     color="error"
                     style={{ fontWeight: "bold" }}
-                    onClick={() => handleFinishTicket(takenTickets[0].uid, "CANCEL")}
+                    onClick={() => handleFinishTicket(takenTickets[0].id, "CANCEL")}
                     isLoading={isLoading["CANCEL"]}
                     disabled={ticketRecalled || isLoading["CANCEL"] || isLoading["FINISH"]}
                   >
@@ -103,7 +103,7 @@ const BackofficeHomeView = () => {
                 </Box>
                 <Box className="flex flex-col gap-3 bg-slate-50 p-2 rounded-lg shadow-lg">
                   <Typography variant="h6" style={{ fontWeight: "bold" }}>Turno: {takenTickets[0]?.code}</Typography>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Área: {takenTickets[0]?.procedure}</Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Área: {takenTickets[0]?.areaId}</Typography>
                   <Typography variant="h6" style={{ fontWeight: "bold" }}>Fecha: {`${new Date(takenTickets[0]?.takenAt).toLocaleDateString('ES-es', {
                     year: 'numeric',
                     month: 'numeric',

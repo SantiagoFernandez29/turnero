@@ -1,15 +1,16 @@
 export type Ticket = {
-  area: string;
+  // area: string;
   areaId: number;
   box: {
     id: number;
     name: string;
-  };
+  } | null;
   code: string;
-  procedure: string;
+  // procedure: string;
   prioritary: boolean;
   procedureId: number;
   takenAt: string;
-  uid: number;
-  userIdentifier: string;
+  id: number;
+  userId: number | null;
+  // userIdentifier: string;
 };

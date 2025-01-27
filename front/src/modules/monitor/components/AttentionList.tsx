@@ -19,8 +19,8 @@ const AttentionList = () => {
           }
           {
             takenTickets.length > 0 ? takenTickets.map((ticket, index) => (
-              <Typography key={index} variant="h3" className={`${(ticketRecalled && ticket.uid === recalledTicketUid) ? "flash-animation" : "bg-violet-600"}`} style={{ fontWeight: "bold", textAlign: "center", color: "white", padding: "5px" }}>
-                {ticket.uid}
+              <Typography key={index} variant="h3" className={`${(ticketRecalled && ticket.id === recalledTicketUid) ? "flash-animation" : "bg-violet-600"}`} style={{ fontWeight: "bold", textAlign: "center", color: "white", padding: "5px" }}>
+                {ticket.id}
               </Typography>
             )
             ) : pendingTickets.length === 0 && takenTickets.length === 0 ?
@@ -44,8 +44,8 @@ const AttentionList = () => {
           }
           {
             takenTickets.length > 0 ? takenTickets.map((ticket, index) => (
-              <Typography key={index} variant="h3" className={`${(ticketRecalled && ticket.uid === recalledTicketUid) ? "flash-animation" : "bg-violet-600"}`} style={{ fontWeight: "bold", textAlign: "center", color: "white", padding: "5px" }}>
-                {ticket.box.name}
+              <Typography key={index} variant="h3" className={`${(ticketRecalled && ticket.id === recalledTicketUid) ? "flash-animation" : "bg-violet-600"}`} style={{ fontWeight: "bold", textAlign: "center", color: "white", padding: "5px" }}>
+                {ticket.box?.name}
               </Typography>
             )
             ) : pendingTickets.length === 0 && takenTickets.length === 0 ?

@@ -47,13 +47,15 @@ const useMonitor = () => {
         });
 
         socket.on(EVENTS.MONITOR.RECALL_TICKET, (ticket: Ticket) => {
+            console.log("Se escucha el evento RECALL_TICKET");
             setTicketRecalled(true);
             new Audio(sound_effect).play();
             setTimeout(() => {
                 setTicketRecalled(false);
             }, 5000);
-            setRecalledTicketUid(ticket.uid);
-            console.log(ticket);
+            setRecalledTicketUid(ticket.id);
+            console.log("ticket: ", ticket);
+            console.log("recalledTicketId: ", ticket.id);
         });
 
         return () => {

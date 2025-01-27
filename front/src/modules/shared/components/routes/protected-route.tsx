@@ -33,8 +33,8 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
         
     const validTerminal = user?.terminalType === terminal || user?.terminalType === "*";
     const validScope = user?.roles.some((role) => role.permissions.some((permission) => permission.scope === scope || permission.scope === "*"));
-    // const hasPermission = user?.terminalType === "box" ? validTerminal && token : scope ? validTerminal && validScope && token : validTerminal && token;
-    const hasPermission = true;
+    const hasPermission = user?.terminalType === "BOX" ? validTerminal && token : scope ? validTerminal && validScope && token : validTerminal && token;
+    // const hasPermission = true;
 
 
     if (!hasPermission) {
