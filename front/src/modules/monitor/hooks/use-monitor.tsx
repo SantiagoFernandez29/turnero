@@ -14,9 +14,7 @@ const useMonitor = () => {
     const [pendingTickets, setPendingTickets] = useState<Ticket[]>([]);
     const [takenTickets, setTakenTickets] = useState<Ticket[]>([]);
     const [ticketRecalled, setTicketRecalled] = useState<boolean>(false);
-    const [recalledTicketUid, setRecalledTicketUid] = useState<number | null>(null);
-
-    console.log("recalledTicketUid", recalledTicketUid);
+    const [recalledTicketId, setRecalledTicketId] = useState<number | null>(null);
 
     const { current: socket } = useRef<Socket>(
         io(SOCKET_URL, {
@@ -46,14 +44,22 @@ const useMonitor = () => {
             setTakenTickets(data.takenTickets);
         });
 
-        socket.on(EVENTS.MONITOR.RECALL_TICKET, (ticket: Ticket) => {
-            console.log("Se escucha el evento RECALL_TICKET");
+        socket.on(EVENTS.MONITOR.TICKET_TAKEN, (ticket: Ticket) => {
             setTicketRecalled(true);
             new Audio(sound_effect).play();
             setTimeout(() => {
                 setTicketRecalled(false);
             }, 5000);
-            setRecalledTicketUid(ticket.id);
+            setRecalledTicketId(ticket.id);
+        });
+
+        socket.on(EVENTS.MONITOR.RECALL_TICKET, (ticket: Ticket) => {
+            setTicketRecalled(true);
+            new Audio(sound_effect).play();
+            setTimeout(() => {
+                setTicketRecalled(false);
+            }, 5000);
+            setRecalledTicketId(ticket.id);
             console.log("ticket: ", ticket);
             console.log("recalledTicketId: ", ticket.id);
         });
@@ -64,7 +70,7 @@ const useMonitor = () => {
 
     }, [socket]);
 
-    return { pendingTickets, takenTickets, ticketRecalled, recalledTicketUid };
+    return { pendingTickets, takenTickets, ticketRecalled, recalledTicketId };
 }
 
 export default useMonitor;

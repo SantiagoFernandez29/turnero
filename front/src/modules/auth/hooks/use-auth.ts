@@ -20,7 +20,7 @@ const useAuth = () => {
         console.log(data);
         setUser(data.user);
         setToken(data.token);
-        navigate(data.user.terminalType)
+        navigate(data.user.terminalType.toLowerCase())
     }
 
     const onError = () => {
@@ -32,7 +32,7 @@ const useAuth = () => {
     const logout = () => {
         setUser(null);
         setToken(null);
-        if (user?.terminalType === "BOX") localStorage.removeItem("box");
+        if (user?.terminalType.toLowerCase() === "box") localStorage.removeItem("box");
         navigate(PATHS.GENERAL.LOGIN);
     }
     

@@ -7,8 +7,10 @@ export const EVENTS = {
     },
     TOTEM: {
         CREATE_TICKET: "CREATE_TICKET",
+        TICKET_CREATED: "TICKET_CREATED",
     },
     MONITOR: {
+        TICKET_TAKEN: "TICKET_TAKEN",
         RECALL_TICKET: "RECALL_TICKET",
     },
     BACKOFFICE: {

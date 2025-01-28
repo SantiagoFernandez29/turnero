@@ -1,13 +1,14 @@
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { AreaButtonDto } from "../dto/area-button";
+import LoadingButton from "../../shared/components/ui/loading-button";
 
 
-const AreaButton = ({ title, onClick }: AreaButtonDto) => {
+const AreaButton = ({ title, onClick, isLoading }: AreaButtonDto) => {
   return (
     <Box component={"button"}>
-      <Button variant="contained" color="secondary" size="large" fullWidth onClick={onClick}>
+      <LoadingButton variant="contained" color="secondary" size="large" fullWidth onClick={onClick} isLoading={false}>
         {title}
-      </Button>
+      </LoadingButton>
     </Box>
   );
 };

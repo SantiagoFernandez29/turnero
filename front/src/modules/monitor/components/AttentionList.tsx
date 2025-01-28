@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import useMonitor from "../hooks/use-monitor";
 
 const AttentionList = () => {
-  const { pendingTickets, takenTickets, ticketRecalled, recalledTicketUid } = useMonitor();
+  const { pendingTickets, takenTickets, ticketRecalled, recalledTicketId } = useMonitor();
 
   return (
     <Box className="flex flex-row gap-3 w-1/2 justify-center">
@@ -19,8 +19,8 @@ const AttentionList = () => {
           }
           {
             takenTickets.length > 0 ? takenTickets.map((ticket, index) => (
-              <Typography key={index} variant="h3" className={`${(ticketRecalled && ticket.id === recalledTicketUid) ? "flash-animation" : "bg-violet-600"}`} style={{ fontWeight: "bold", textAlign: "center", color: "white", padding: "5px" }}>
-                {ticket.id}
+              <Typography key={index} variant="h3" className={`${(ticketRecalled && ticket.id === recalledTicketId) ? "flash-animation" : "bg-violet-600"}`} style={{ fontWeight: "bold", textAlign: "center", color: "white", padding: "5px" }}>
+                {ticket.code}
               </Typography>
             )
             ) : pendingTickets.length === 0 && takenTickets.length === 0 ?
@@ -44,7 +44,7 @@ const AttentionList = () => {
           }
           {
             takenTickets.length > 0 ? takenTickets.map((ticket, index) => (
-              <Typography key={index} variant="h3" className={`${(ticketRecalled && ticket.id === recalledTicketUid) ? "flash-animation" : "bg-violet-600"}`} style={{ fontWeight: "bold", textAlign: "center", color: "white", padding: "5px" }}>
+              <Typography key={index} variant="h3" className={`${(ticketRecalled && ticket.id === recalledTicketId) ? "flash-animation" : "bg-violet-600"}`} style={{ fontWeight: "bold", textAlign: "center", color: "white", padding: "5px" }}>
                 {ticket.box?.name}
               </Typography>
             )

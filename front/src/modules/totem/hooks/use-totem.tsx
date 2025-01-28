@@ -13,6 +13,7 @@ const useTotem = () => {
 
     const [area, setArea] = useState<string>("");
     const [showHomeView, setShowHomeView] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { current: socket } = useRef<Socket>(
         io(SOCKET_URL, {
@@ -44,6 +45,10 @@ const useTotem = () => {
             setShowHomeView(true);
         });
 
+        socket.on(EVENTS.TOTEM.TICKET_CREATED, () => {
+            setIsLoading(false);
+        })
+
         return () => {
             socket.disconnect();
         }
@@ -56,13 +61,13 @@ const useTotem = () => {
             prioritary: true,
             procedureId: tramite.id,
         };
-
+        setIsLoading(true);
         socket.emit(EVENTS.TOTEM.CREATE_TICKET, payload);
         toast.success(`Seleccionó el trámite "${tramite.name}"`);
         setShowHomeView(true)
     };
 
-    return { handleClickedArea, setShowHomeView, showHomeView, area };
+    return { handleClickedArea, setShowHomeView, showHomeView, area, isLoading };
 };
 
 export default useTotem;

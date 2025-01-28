@@ -21,7 +21,10 @@ const BackofficeHomeView = () => {
   } = useBackoffice(id ? { id } : { id: "" });
 
   useEffect(() => {
-    if (localStorage.getItem("box") === null || localStorage.getItem("box") !== id) navigate(PATHS.BACKOFFICE.HOME);
+    if (localStorage.getItem("box") === null || localStorage.getItem("box") !== id) {
+      localStorage.removeItem("box");  
+      navigate(PATHS.BACKOFFICE.HOME);
+    }
   }, []);
 
   return (

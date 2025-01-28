@@ -4,7 +4,6 @@ import { SOCKET_URL } from "../../../configs/constants/url";
 import { EVENTS } from "../../../configs/constants/events";
 import { Ticket } from "../../shared/components/models/ticket";
 import toast from "react-hot-toast";
-import sound_effect from "../../../assets/sounds/sound_effect.mp3";
 import useAuth from "../../auth/hooks/use-auth";
 
 interface isLoadingI {
@@ -22,7 +21,6 @@ const useBackoffice = ({ id }: { id: string }) => {
         "FINISH": false,
         "CANCEL": false,
     });
-
 
     const { token } = useAuth();
 

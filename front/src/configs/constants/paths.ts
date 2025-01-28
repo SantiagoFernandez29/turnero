@@ -1,12 +1,12 @@
 const PATHS = {
     TOTEM: {
-        HOME: '/TOTEM',
+        HOME: '/totem',
     },
     MONITOR: {
-        HOME: '/MONITOR',
+        HOME: '/monitor',
     },
     BACKOFFICE: {
-        HOME: '/BOX',
+        HOME: '/box',
         BOX: '/:id'
     },
     GENERAL: {
