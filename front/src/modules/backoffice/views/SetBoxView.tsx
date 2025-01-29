@@ -2,30 +2,28 @@ import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 import PATHS from "../../../configs/constants/paths";
 import { useState } from "react";
+import { useGetBoxes } from "../hooks/useGetBoxes";
+import useAuth from "../../auth/hooks/use-auth";
+import { BoxType } from "../models/box";
 
 
 const SetBoxView = () => {
 
     const navigate = useNavigate();
+    const { user, token } = useAuth();
 
     const [id, setId] = useState<string>("")
     const [boxSelected, setBoxSelected] = useState<boolean>(false)
+    const boxes = useGetBoxes(Number(user?.areaId), token as string);
 
-    const boxList = [
-        { id: 1, name: "1" },
-        { id: 2, name: "2" },
-        { id: 3, name: "3" },
-        { id: 4, name: "4" },
-        { id: 5, name: "5" },
-    ]
 
     const handleOnClickLogin = () => {
         navigate(`${PATHS.BACKOFFICE.HOME + PATHS.BACKOFFICE.BOX.replace(':id', id)}`)
     }
 
-    const handleOnClickOption = (option: string) => {
-        setId(option)
-        localStorage.setItem("box", option)
+    const handleOnClickOption = (box: BoxType) => {
+        setId(String(box.id))
+        localStorage.setItem("box", JSON.stringify(box))
         setBoxSelected(true)
     }
 
@@ -41,9 +39,9 @@ const SetBoxView = () => {
                 className="w-1/2"
                 select
             >
-                {boxList.map((box) => {
-                    return <MenuItem key={box.id} value={box.name} onClick={() => handleOnClickOption(box.name)}>{box.name}</MenuItem>
-                })}
+                { boxes ? boxes.boxes?.map((box) => {
+                    return <MenuItem key={box.id} value={box.name} onClick={() => handleOnClickOption(box)}>{box.name}</MenuItem>
+                }) : 'No hay boxes disponibles'}
             </TextField>
             <Button variant="contained" color="secondary" className="w-1/2" disabled={!boxSelected} onClick={handleOnClickLogin} style={{ fontWeight: "bold", fontFamily: "inherit" }}>
                 Ingresar

@@ -9,6 +9,11 @@ const BackofficeHomeView = () => {
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
+  const boxItem = localStorage.getItem("box");
+  const box = boxItem && JSON.parse(boxItem);
+
+  console.log("Box", box);
+
   const {
     pendingTickets,
     takenTickets,
@@ -18,11 +23,12 @@ const BackofficeHomeView = () => {
     handleCallTicket,
     handleFinishTicket,
     handleReiterateTicket,
-  } = useBackoffice(id ? { id } : { id: "" });
+  } = useBackoffice(box?.id);
+
 
   useEffect(() => {
-    if (localStorage.getItem("box") === null || localStorage.getItem("box") !== id) {
-      localStorage.removeItem("box");  
+    if (box === null || ( box.id !== Number(id))) {
+      localStorage.removeItem("box");
       navigate(PATHS.BACKOFFICE.HOME);
     }
   }, []);

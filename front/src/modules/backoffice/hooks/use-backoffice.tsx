@@ -11,7 +11,7 @@ interface isLoadingI {
     "CANCEL": boolean,
 }
 
-const useBackoffice = ({ id }: { id: string }) => {
+const useBackoffice = ( id: number ) => {
 
     const [pendingTickets, setPendingTickets] = useState<Ticket[]>([]);
     const [takenTickets, setTakenTickets] = useState<Ticket[]>([]);
@@ -30,7 +30,7 @@ const useBackoffice = ({ id }: { id: string }) => {
                 token: token,
             },
             query: {
-                boxId: localStorage.getItem("box"),
+                boxId: id,
             },
             autoConnect: false,
             transports: ["websocket"],
@@ -60,8 +60,8 @@ const useBackoffice = ({ id }: { id: string }) => {
             console.log(data)
         })
 
-        socket.on(EVENTS.BACKOFFICE.TICKET_FINISHED, (data: {ticketId: number, type: string}) => {
-            setIsLoading((prev) => ({...prev, [data.type]: false}))
+        socket.on(EVENTS.BACKOFFICE.TICKET_FINISHED, (data: { ticketId: number, type: string }) => {
+            setIsLoading((prev) => ({ ...prev, [data.type]: false }))
         })
 
         return () => {
@@ -109,7 +109,7 @@ const useBackoffice = ({ id }: { id: string }) => {
             ticketId,
             type,
         }
-        setIsLoading((prev) => ({...prev, [type]: true}));
+        setIsLoading((prev) => ({ ...prev, [type]: true }));
         socket.emit(EVENTS.BACKOFFICE.FINISH_TICKET, payload)
     }
 
