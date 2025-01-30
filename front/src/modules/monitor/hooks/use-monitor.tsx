@@ -39,7 +39,6 @@ const useMonitor = () => {
         });
 
         socket.on(EVENTS.GENERAL.TERMINAL_STATUS, (data) => {
-            console.log(data);
             setPendingTickets(data.pendingTickets);
             setTakenTickets(data.takenTickets);
         });

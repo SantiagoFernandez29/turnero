@@ -4,6 +4,7 @@ import useBackoffice from "../hooks/use-backoffice";
 import PATHS from "../../../configs/constants/paths";
 import { useEffect } from "react";
 import LoadingButton from "../../shared/components/ui/loading-button";
+import useAuth from "../../auth/hooks/use-auth";
 
 const BackofficeHomeView = () => {
   const navigate = useNavigate();
@@ -12,8 +13,10 @@ const BackofficeHomeView = () => {
   const boxItem = localStorage.getItem("box");
   const box = boxItem && JSON.parse(boxItem);
 
-  console.log("Box", box);
+  const { user } = useAuth();
 
+  // console.log("user", user);
+  
   const {
     pendingTickets,
     takenTickets,
@@ -24,8 +27,7 @@ const BackofficeHomeView = () => {
     handleFinishTicket,
     handleReiterateTicket,
   } = useBackoffice(box?.id);
-
-
+  
   useEffect(() => {
     if (box === null || ( box.id !== Number(id))) {
       localStorage.removeItem("box");
@@ -35,9 +37,14 @@ const BackofficeHomeView = () => {
 
   return (
     <Box className="flex flex-col items-center gap-10 m-5 w-full">
-      <Typography variant="h5" className="text-center" style={{ fontWeight: "bold" }}>
+      <Box className="flex flex-row justify-between w-full mt-2">
+      <Typography variant="h5" className="text-center" style={{ fontWeight: "bold", fontFamily: "inherit" }}>
         Backoffice Home View - Box <span className="text-purple-700">{id}</span>
       </Typography>
+      <Typography variant="h5" className="text-center" style={{ fontWeight: "bold", fontFamily: "inherit" }}>
+        <span className="text-purple-700">{user?.username}</span>
+      </Typography>
+      </Box>
       <Box className="flex flex-row place-content-between w-full">
         <Box className="flex flex-col gap-5 bg-indigo-200 p-8 border-2 border-indigo-300 rounded-lg shadow-lg">
           <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold" }}>Pendientes</Typography>
@@ -54,15 +61,16 @@ const BackofficeHomeView = () => {
                   >
                     {ticket.code}
                   </Typography>
-                  <Button
+                  <LoadingButton
                     variant="contained"
                     color={index === 0 ? "success" : "primary"}
-                    style={{ fontWeight: "bold" }}
+                    style={ index !== 0 ? { display: "none"} : { fontWeight: "bold" }}
                     onClick={() => handleCallTicket(ticket)}
-                    disabled={index !== 0}
+                    isLoading={isLoading["CALL"]}
+                    disabled={takenTickets.length > 0 || isLoading["CALL"]}
                   >
                     Llamar
-                  </Button>
+                  </LoadingButton>
                 </Box>
               ))}
             {pendingTickets.length === 0 &&

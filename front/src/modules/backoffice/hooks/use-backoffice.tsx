@@ -7,17 +7,19 @@ import toast from "react-hot-toast";
 import useAuth from "../../auth/hooks/use-auth";
 
 interface isLoadingI {
+    "CALL": boolean,
     "FINISH": boolean,
     "CANCEL": boolean,
 }
 
-const useBackoffice = ( id: number ) => {
+const useBackoffice = (id: number) => {
 
     const [pendingTickets, setPendingTickets] = useState<Ticket[]>([]);
     const [takenTickets, setTakenTickets] = useState<Ticket[]>([]);
     const [ticketRecalled, setTicketRecalled] = useState<boolean>(false);
     const [timer, setTimer] = useState<number>(20);
     const [isLoading, setIsLoading] = useState<isLoadingI>({
+        "CALL": false,
         "FINISH": false,
         "CANCEL": false,
     });
@@ -64,6 +66,10 @@ const useBackoffice = ( id: number ) => {
             setIsLoading((prev) => ({ ...prev, [data.type]: false }))
         })
 
+        socket.on(EVENTS.BACKOFFICE.TICKET_TAKEN, () => {
+            setIsLoading((prev) => ({ ...prev, "CALL": false }))
+        });
+
         return () => {
             socket.disconnect();
         }
@@ -93,6 +99,7 @@ const useBackoffice = ( id: number ) => {
             areaId: ticket.areaId,
             ticketId: ticket.id,
         }
+        setIsLoading((prev) => ({ ...prev, "CALL": true }));
         socket.emit(EVENTS.BACKOFFICE.TAKE_TICKET, payload);
     }
 
