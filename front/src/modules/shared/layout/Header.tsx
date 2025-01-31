@@ -29,7 +29,7 @@ const Header = () => {
 
     return (
         <Box className={`bg-violet-300 w-full flex flex-col place-items-end transition-all duration-300 absolute top-0 
-        ${terminalType === "box" ? "none" : (terminalType !== "box" && isVisible) ? "opacity-100" : "opacity-0 "}`}>
+        ${terminalType === "BOX" ? "none" : (terminalType !== "BOX" && isVisible) ? "opacity-100" : "opacity-0 "}`}>
             <Button variant="text" color="secondary" onClick={logout} style={{ fontWeight: "bold", fontFamily: "inherit" }}>
                 <LogOut className="mx-2"/> Salir
             </Button>

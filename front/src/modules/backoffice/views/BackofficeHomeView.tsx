@@ -15,8 +15,6 @@ const BackofficeHomeView = () => {
 
   const { user } = useAuth();
 
-  // console.log("user", user);
-  
   const {
     pendingTickets,
     takenTickets,
@@ -27,27 +25,30 @@ const BackofficeHomeView = () => {
     handleFinishTicket,
     handleReiterateTicket,
   } = useBackoffice(box?.id);
-  
+
   useEffect(() => {
-    if (box === null || ( box.id !== Number(id))) {
+    if (box === null || (box.id !== Number(id))) {
       localStorage.removeItem("box");
       navigate(PATHS.BACKOFFICE.HOME);
     }
   }, []);
 
+  // console.log("takenTickets",takenTickets);
+  // console.log("pendingTickets",pendingTickets);
+
   return (
     <Box className="flex flex-col items-center gap-10 m-5 w-full">
       <Box className="flex flex-row justify-between w-full mt-2">
-      <Typography variant="h5" className="text-center" style={{ fontWeight: "bold", fontFamily: "inherit" }}>
-        Backoffice Home View - Box <span className="text-purple-700">{id}</span>
-      </Typography>
-      <Typography variant="h5" className="text-center" style={{ fontWeight: "bold", fontFamily: "inherit" }}>
-        <span className="text-purple-700">{user?.username}</span>
-      </Typography>
+        <Typography variant="h5" className="text-center" style={{ fontWeight: "bold", fontFamily: "inherit" }}>
+          Backoffice Home View - Box <span className="text-purple-700">{id}</span>
+        </Typography>
+        <Typography variant="h5" className="text-center" style={{ fontWeight: "bold", fontFamily: "inherit" }}>
+          <span className="text-purple-700">{user?.username}</span>
+        </Typography>
       </Box>
       <Box className="flex flex-row place-content-between w-full">
-        <Box className="flex flex-col gap-5 bg-indigo-200 p-8 border-2 border-indigo-300 rounded-lg shadow-lg">
-          <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold" }}>Pendientes</Typography>
+        <Box className="flex flex-col gap-5 bg-violet-200 p-8 rounded-lg shadow-lg">
+          <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold", fontFamily: "inherit" }}>Pendientes</Typography>
           <Box className=" flex flex-col gap-10">
             {pendingTickets.length >= 1 &&
               pendingTickets.slice(0, 5).map((ticket, index) => (
@@ -64,7 +65,7 @@ const BackofficeHomeView = () => {
                   <LoadingButton
                     variant="contained"
                     color={index === 0 ? "success" : "primary"}
-                    style={ index !== 0 ? { display: "none"} : { fontWeight: "bold" }}
+                    style={index !== 0 ? { display: "none" } : { fontWeight: "bold" }}
                     onClick={() => handleCallTicket(ticket)}
                     isLoading={isLoading["CALL"]}
                     disabled={takenTickets.length > 0 || isLoading["CALL"]}
@@ -74,14 +75,14 @@ const BackofficeHomeView = () => {
                 </Box>
               ))}
             {pendingTickets.length === 0 &&
-              <Typography className="text-center" style={{ fontWeight: "lighter", color: "red" }}>
+              <Typography className="text-center" style={{ fontWeight: "bold", color: "red", fontFamily: "inherit" }}>
                 No hay tickets pendientes
               </Typography>
             }
           </Box>
         </Box>
-        <Box className="flex flex-col gap-5 bg-indigo-200 p-8 border-2 border-indigo-300 rounded-lg shadow-lg">
-          <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold" }}>Recibido</Typography>
+        <Box className="flex flex-col gap-5 bg-violet-200 p-8 rounded-lg shadow-lg">
+          <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold", fontFamily: "inherit"  }}>Recibido</Typography>
           <Box className="flex flex-col gap-10">
             {takenTickets.length > 0 ? (
               <Box className="flex flex-col gap-5">
@@ -102,6 +103,7 @@ const BackofficeHomeView = () => {
                   <Button
                     variant="contained"
                     color="secondary"
+                    style={{ fontWeight: "bold" }}
                     onClick={() => handleReiterateTicket(takenTickets[0].id)}
                     disabled={ticketRecalled || isLoading["CANCEL"] || isLoading["FINISH"]}
                   >
@@ -118,22 +120,24 @@ const BackofficeHomeView = () => {
                     Cancelar
                   </LoadingButton>
                 </Box>
-                <Box className="flex flex-col gap-3 bg-slate-50 p-2 rounded-lg shadow-lg">
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Turno: {takenTickets[0]?.code}</Typography>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Área: {takenTickets[0]?.areaId}</Typography>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Fecha: {`${new Date(takenTickets[0]?.takenAt).toLocaleDateString('ES-es', {
+                <Box className="flex flex-col bg-slate-50 p-2 rounded-lg shadow-lg">
+                  <Box className="flex flex-row items-center justify-between">
+                    <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>{takenTickets[0]?.code}</Typography>
+                    <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit", color: "indigo" }}>{takenTickets[0]?.procedure}</Typography>
+                  </Box>
+                  {takenTickets[0]?.citizenName && takenTickets[0]?.citizenSurname && <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>{takenTickets[0]?.citizenSurname}, {takenTickets[0]?.citizenName}</Typography>}
+                  <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>{takenTickets[0]?.document}</Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>Horario de llamado: {takenTickets[0].takenAt && `${new Date(takenTickets[0].takenAt).toLocaleDateString('ES-es', {
                     year: 'numeric',
                     month: 'numeric',
                     day: 'numeric',
                     hour: '2-digit',
                     minute: '2-digit',
                   })}`}</Typography>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Cantidad de espera: {0}</Typography>
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>Voucher: {0}</Typography>
                 </Box>
               </Box>
             ) : (
-              <Typography className="text-center" style={{ fontWeight: "lighter", color: "red" }}>
+              <Typography className="text-center" style={{ fontWeight: "bold", color: "red", fontFamily: "inherit" }}>
                 No hay tickets en servicio
               </Typography>
             )}
