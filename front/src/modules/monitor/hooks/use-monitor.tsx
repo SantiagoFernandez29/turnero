@@ -27,6 +27,7 @@ const useMonitor = () => {
         })
     );
 
+
     useEffect(() => {
 
         socket.connect();
@@ -39,12 +40,14 @@ const useMonitor = () => {
             toast.error(error.message);
             logout();
         });
-
+        
         socket.on(EVENTS.GENERAL.DISCONNECT, (reason) => {
+            logout();
             console.warn("Socket desconectado:", reason);
         });
 
         socket.on(EVENTS.GENERAL.TERMINAL_STATUS, (data) => {
+            console.log(data.pendingTickets);
             setPendingTickets(data.pendingTickets);
             setTakenTickets(data.takenTickets);
         });
@@ -75,7 +78,7 @@ const useMonitor = () => {
             socket.disconnect();
         }
 
-    }, [socket, logout]);
+    }, [socket]);
 
     return { pendingTickets, takenTickets, ticketRecalled, idTicketRecalled };
 }

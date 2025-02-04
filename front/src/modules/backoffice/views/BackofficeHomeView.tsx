@@ -34,7 +34,7 @@ const BackofficeHomeView = () => {
   }, []);
 
   return (
-    <Box className="flex flex-col items-center gap-10 m-5 w-full">
+    <Box className="flex flex-col gap-10 m-5 w-full">
       <Box className="flex flex-row justify-between w-full mt-2">
         <Typography variant="h5" className="text-center" style={{ fontWeight: "bold", fontFamily: "inherit" }}>
           Backoffice Home View - Box <span className="text-purple-700">{id}</span>
@@ -43,12 +43,12 @@ const BackofficeHomeView = () => {
           <span className="text-purple-700">{user?.username}</span>
         </Typography>
       </Box>
-      <Box className="flex flex-row place-content-between w-full">
+      <Box className="flex flex-row place-content-evenly w-full">
         <Box className="flex flex-col gap-5 bg-violet-200 p-8 rounded-lg shadow-lg">
           <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold", fontFamily: "inherit" }}>Pendientes</Typography>
           <Box className=" flex flex-col gap-10">
             {pendingTickets.length >= 1 &&
-              pendingTickets.slice(0, 5).map((ticket, index) => (
+              pendingTickets.slice(0, 5).reverse().map((ticket, index) => (
                 <Box
                   key={index}
                   className={index === 0 ? "flex flex-row items-center justify-between bg-lime-300 p-2 rounded-lg shadow-lg w-" : "flex flex-row items-center justify-between bg-indigo-100 p-2 rounded-lg shadow-lg"}

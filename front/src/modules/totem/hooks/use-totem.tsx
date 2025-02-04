@@ -58,7 +58,7 @@ const useTotem = () => {
             socket.disconnect();
         }
 
-    }, [socket, logout]);
+    }, [socket]);
 
     const handleClickedArea = (tramite: Procedure) => {
         const payload = {

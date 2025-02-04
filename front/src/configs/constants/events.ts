@@ -5,6 +5,7 @@ export const EVENTS = {
         DISCONNECT: "disconnect",
         TERMINAL_STATUS: "TERMINAL_STATUS",
         MAX_PENDING_QUEUE_ALERT_ON: "MAX_PENDING_QUEUE_ALERT_ON",
+        TOKEN_EXPIRED: 'TOKEN_EXPIRED',
     },
     TOTEM: {
         CREATE_TICKET: "CREATE_TICKET",
