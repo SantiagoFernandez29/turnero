@@ -4,10 +4,10 @@ import { Procedure } from "../models/procedure"
 
 export const GET_PROCEDURES = "GET_PROCEDURES"
 
-export const useProcedures = (token: string, areaId: number) => {
+export const useProcedures = (token: string, areaId: number, logout: () => void) => {
     const procedures = useQuery<Procedure[]>({
         queryKey: [GET_PROCEDURES, areaId, token],
-        queryFn: () => getProcedures(token, areaId),
+        queryFn: () => getProcedures(token, areaId, logout),
     })
 
     return procedures

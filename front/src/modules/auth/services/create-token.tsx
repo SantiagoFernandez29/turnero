@@ -3,7 +3,7 @@ import { User } from "../models/user";
 
 
 export const createToken = (payload: LoginCredentials): Promise<{ token: string, user: User }> =>
-    fetch("http://localhost:3000/auth2/login", {
+    fetch(`${import.meta.env.VITE_API_BASE}/auth2/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

@@ -10,11 +10,11 @@ import { BoxType } from "../models/box";
 const SetBoxView = () => {
 
     const navigate = useNavigate();
-    const { user, token } = useAuth();
+    const { user, token, logout } = useAuth();
 
     const [id, setId] = useState<string>("")
     const [boxSelected, setBoxSelected] = useState<boolean>(false)
-    const boxes = useGetBoxes(Number(user?.areaId), token as string);
+    const boxes = useGetBoxes(Number(user?.areaId), token as string, logout);
 
 
     const handleOnClickLogin = () => {

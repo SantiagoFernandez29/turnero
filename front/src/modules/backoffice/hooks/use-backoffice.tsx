@@ -24,7 +24,7 @@ const useBackoffice = (id: number) => {
         "CANCEL": false,
     });
 
-    const { token } = useAuth();
+    const { token, logout } = useAuth();
 
     const { current: socket } = useRef<Socket>(
         io(SOCKET_URL, {
@@ -48,6 +48,11 @@ const useBackoffice = (id: number) => {
             console.log("Conectado al servidor WebSocket")
         });
 
+        socket.on(EVENTS.GENERAL.CONNECT_ERROR, (error) => {
+            toast.error(error.message);
+            logout();
+        });
+
         socket.on(EVENTS.GENERAL.DISCONNECT, (reason) => {
             console.warn("Socket desconectado:", reason);
         });
@@ -55,26 +60,26 @@ const useBackoffice = (id: number) => {
         socket.on(EVENTS.GENERAL.TERMINAL_STATUS, (data) => {
             setPendingTickets(data.pendingTickets);
             setTakenTickets(data.takenTickets);
+            setIsLoading((prev) => ({ ...prev, "CALL": false, "FINISH": false, "CANCEL": false }));
         })
 
-        socket.on(EVENTS.BACKOFFICE.RECALL_TICKET, (data) => {
-            console.log("Ticket recordado")
-            console.log(data)
-        })
+        // socket.on(EVENTS.BACKOFFICE.RECALL_TICKET, (data) => {
+        //     console.log(data)
+        // })
 
-        socket.on(EVENTS.BACKOFFICE.TICKET_FINISHED, (data: { ticketId: number, type: string }) => {
-            setIsLoading((prev) => ({ ...prev, [data.type]: false }))
-        })
+        // socket.on(EVENTS.BACKOFFICE.TICKET_FINISHED, (data: { ticketId: number, type: string }) => {
+        //     setIsLoading((prev) => ({ ...prev, [data.type]: false }))
+        // })
 
-        socket.on(EVENTS.BACKOFFICE.TICKET_TAKEN, () => {
-            setIsLoading((prev) => ({ ...prev, "CALL": false }))
-        });
+        // socket.on(EVENTS.BACKOFFICE.TICKET_TAKEN, () => {
+        //     setIsLoading((prev) => ({ ...prev, "CALL": false }))
+        // });
 
         return () => {
             socket.disconnect();
         }
 
-    }, [socket])
+    }, [socket]);
 
     useEffect(() => {
         let interval: NodeJS.Timeout

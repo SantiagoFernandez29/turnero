@@ -33,9 +33,6 @@ const BackofficeHomeView = () => {
     }
   }, []);
 
-  // console.log("takenTickets",takenTickets);
-  // console.log("pendingTickets",pendingTickets);
-
   return (
     <Box className="flex flex-col items-center gap-10 m-5 w-full">
       <Box className="flex flex-row justify-between w-full mt-2">
@@ -58,7 +55,7 @@ const BackofficeHomeView = () => {
                 >
                   <Typography
                     key={index}
-                    style={index === 0 ? { fontWeight: "bold", color: "green" } : { fontWeight: "lighter" }}
+                    style={index === 0 ? { fontWeight: "bold", color: "green", fontFamily: "inherit" } : { fontWeight: "lighter", fontFamily: "inherit" }}
                   >
                     {ticket.code}
                   </Typography>
@@ -87,7 +84,7 @@ const BackofficeHomeView = () => {
             {takenTickets.length > 0 ? (
               <Box className="flex flex-col gap-5">
                 <Box className="flex flex-row items-center justify-between bg-red-400 p-2 rounded-lg shadow-lg gap-4">
-                  <Typography style={{ fontWeight: "bold", color: "red" }}>
+                  <Typography style={{ fontWeight: "bold", color: "red", fontFamily: "inherit" }}>
                     {takenTickets[0]?.code}
                   </Typography>
                   <LoadingButton

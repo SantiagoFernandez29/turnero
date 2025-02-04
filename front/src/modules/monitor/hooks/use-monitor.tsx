@@ -5,16 +5,17 @@ import { Ticket } from "../../shared/components/models/ticket";
 import { EVENTS } from "../../../configs/constants/events";
 import sound_effect from "../../../assets/sounds/sound_effect.mp3";
 import useAuth from "../../auth/hooks/use-auth";
+import toast from "react-hot-toast";
 
 
 const useMonitor = () => {
 
-    const { token } = useAuth();
+    const { token, logout } = useAuth();
 
     const [pendingTickets, setPendingTickets] = useState<Ticket[]>([]);
     const [takenTickets, setTakenTickets] = useState<Ticket[]>([]);
-    const [ticketRecalled, setTicketRecalled] = useState<boolean>(false);
-    const [recalledTicketId, setRecalledTicketId] = useState<number | null>(null);
+    const [ticketRecalled, setTicketRecalled] = useState<Record<number, boolean>>({});
+    const [idTicketRecalled, setIdTicketRecalled] = useState<Record<number, boolean>>({});
 
     const { current: socket } = useRef<Socket>(
         io(SOCKET_URL, {
@@ -34,6 +35,11 @@ const useMonitor = () => {
             console.log("Conectado al servidor WebSocket")
         });
 
+        socket.on(EVENTS.GENERAL.CONNECT_ERROR, (error) => {
+            toast.error(error.message);
+            logout();
+        });
+
         socket.on(EVENTS.GENERAL.DISCONNECT, (reason) => {
             console.warn("Socket desconectado:", reason);
         });
@@ -44,21 +50,23 @@ const useMonitor = () => {
         });
 
         socket.on(EVENTS.MONITOR.TICKET_TAKEN, (ticket: Ticket) => {
-            setTicketRecalled(true);
+            setIdTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: true }));
+            setTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: true }));
             new Audio(sound_effect).play();
             setTimeout(() => {
-                setTicketRecalled(false);
+                setTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: false }));
+                setIdTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: false }));
             }, 5000);
-            setRecalledTicketId(ticket.id);
         });
 
         socket.on(EVENTS.MONITOR.RECALL_TICKET, (ticket: Ticket) => {
-            setTicketRecalled(true);
+            setIdTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: true }));
+            setTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: true }));
             new Audio(sound_effect).play();
             setTimeout(() => {
-                setTicketRecalled(false);
+                setTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: false }));
+                setIdTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: false }));
             }, 5000);
-            setRecalledTicketId(ticket.id);
             console.log("ticket: ", ticket);
             console.log("recalledTicketId: ", ticket.id);
         });
@@ -67,9 +75,9 @@ const useMonitor = () => {
             socket.disconnect();
         }
 
-    }, [socket]);
+    }, [socket, logout]);
 
-    return { pendingTickets, takenTickets, ticketRecalled, recalledTicketId };
+    return { pendingTickets, takenTickets, ticketRecalled, idTicketRecalled };
 }
 
 export default useMonitor;

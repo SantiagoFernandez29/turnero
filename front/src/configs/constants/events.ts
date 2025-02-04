@@ -1,6 +1,7 @@
 export const EVENTS = {
     GENERAL: {
         CONNECT: "connect",
+        CONNECT_ERROR: "connect_error",
         DISCONNECT: "disconnect",
         TERMINAL_STATUS: "TERMINAL_STATUS",
         MAX_PENDING_QUEUE_ALERT_ON: "MAX_PENDING_QUEUE_ALERT_ON",

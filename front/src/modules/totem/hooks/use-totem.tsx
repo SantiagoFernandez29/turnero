@@ -9,7 +9,7 @@ import { AreaDto } from "../dto/area";
 
 
 const useTotem = () => {
-    const { token } = useAuth();
+    const { token, logout } = useAuth();
 
     const [area, setArea] = useState<string>("");
     const [showHomeView, setShowHomeView] = useState<boolean>(true);
@@ -30,6 +30,11 @@ const useTotem = () => {
 
         socket.on(EVENTS.GENERAL.CONNECT, () => {
             console.log("Conectado al servidor WebSocket")
+        });
+
+        socket.on(EVENTS.GENERAL.CONNECT_ERROR, (error) => {
+            toast.error(error.message);
+            logout();
         });
 
         socket.on(EVENTS.GENERAL.DISCONNECT, (reason) => {
@@ -53,7 +58,7 @@ const useTotem = () => {
             socket.disconnect();
         }
 
-    }, [socket]);
+    }, [socket, logout]);
 
     const handleClickedArea = (tramite: Procedure) => {
         const payload = {
