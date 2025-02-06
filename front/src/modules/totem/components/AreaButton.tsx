@@ -3,10 +3,10 @@ import { AreaButtonDto } from "../dto/area-button";
 import LoadingButton from "../../shared/components/ui/loading-button";
 
 
-const AreaButton = ({ title, onClick, isLoading }: AreaButtonDto) => {
+const AreaButton = ({ title, onClick, isLoading, style }: AreaButtonDto) => {
   return (
     <Box component={"button"}>
-      <LoadingButton variant="contained" color="secondary" size="large" fullWidth onClick={onClick} isLoading={false}>
+      <LoadingButton style={style} variant="contained" color="secondary" size="large" fullWidth onClick={onClick} isLoading={isLoading}>
         {title}
       </LoadingButton>
     </Box>
