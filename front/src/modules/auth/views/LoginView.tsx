@@ -60,6 +60,7 @@ const LoginView = () => {
                   helperText={loginForm.formState.errors.username?.message}
                   className="w-full"
                   disabled={isLoading}
+                  sx={{ input: { fontFamily: "Quicksand" }, label: { fontFamily: "Quicksand" } }}
                 />
               )}
             />
@@ -77,6 +78,7 @@ const LoginView = () => {
                   helperText={loginForm.formState.errors.password?.message}
                   className="w-full"
                   disabled={isLoading}
+                  sx={{ input: { fontFamily: "Quicksand" }, label: { fontFamily: "Quicksand" } }}
                 />
               )}
             />
