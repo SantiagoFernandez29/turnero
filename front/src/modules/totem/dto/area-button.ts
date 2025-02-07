@@ -1,6 +1,6 @@
 export interface AreaButtonDto {
     title: string;
     onClick: () => void;
-    isLoading: boolean;
+    isLoading?: boolean;
     style?: React.CSSProperties;
 }

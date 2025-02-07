@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
     <footer>
-      <p className="text-">© 2024. All rights reserved.</p>
+      <p className="text-neutral-500">© 2025. Municipalidad de Campana.</p>
     </footer>
   );
 };

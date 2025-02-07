@@ -1,19 +1,19 @@
 import AreaButton from "../components/AreaButton";
 import { Box, Button, Stack, Switch, TextField, Typography } from "@mui/material";
 import useTotem from "../hooks/use-totem";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useProcedures } from "../hooks/use-procedures";
 import useAuth from "../../auth/hooks/use-auth";
 import { Accessibility, PersonStanding } from 'lucide-react';
+import LoadingButton from "../../shared/components/ui/loading-button";
 
 const TotemHomeView = () => {
 
     const { user, token, logout } = useAuth();
     const { data: tramites } = useProcedures(token ? token : "", user ? user.areaId : -1, logout);
-    const { handleClickedArea, setShowHomeView, setPriority, showHomeView, area, isLoading, priority } = useTotem();
+    const { handleClickedArea, setShowHomeView, setPriority, setDocument, showHomeView, area, isLoading, priority, document } = useTotem();
 
     const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    const [document, setDocument] = useState("");
 
     const handleClick = (number: number) => {
         setDocument((prev) => prev + number);
@@ -32,6 +32,14 @@ const TotemHomeView = () => {
         setPriority(false);
         setDocument("");
     }
+
+    useEffect(() => {
+        if (isLoading) {
+            setShowHomeView(false);
+        } else {
+            setShowHomeView(true);
+        }
+    }, [isLoading, setShowHomeView]);
 
     return (
         <React.Fragment>
@@ -65,13 +73,18 @@ const TotemHomeView = () => {
                 <Box className="flex flex-col items-center place-content-between m-5">
                     <Typography variant="h4" style={{ fontWeight: "lighter", fontFamily: "inherit", textAlign: "center" }}> Seleccione el trámite sobre el cual desea solicitar un turno. </Typography>
                     <Box className="flex flex-row p-3 rounded-lg gap-4 bg-lime-300">
-                        <Accessibility size={32} />
-                        <PersonStanding size={32} />
+                        
                         <Typography variant="h5" style={{ fontWeight: "bold", fontFamily: "inherit", textAlign: "center" }}> ¿Presenta condición prioritaria? </Typography>
                         <Stack direction="row" spacing={1}>
-                            <Typography variant="h6" style={{ fontFamily: "inherit" }}> No </Typography>
-                            <Switch color="success" checked={priority} onChange={handleChangePriority}/>
-                            <Typography variant="h6" style={{ fontFamily: "inherit" }}> Sí </Typography>
+                            <Box className="flex flex-row gap-2 items-start">
+                                <PersonStanding size={32} />
+                                <Typography variant="h6" style={{ fontFamily: "inherit" }}> No </Typography>
+                            </Box>
+                            <Switch color="success" checked={priority} onChange={handleChangePriority} />
+                            <Box className="flex flex-row gap-2 items-start">
+                                <Typography variant="h6" style={{ fontFamily: "inherit" }}> Sí </Typography>
+                                <Accessibility size={32} />
+                            </Box>
                         </Stack>
                     </Box>
                     <Box className="grid grid-cols-2 gap-4 w-full">
@@ -79,9 +92,9 @@ const TotemHomeView = () => {
                             <AreaButton key={tramite.id} title={tramite.name} style={{ fontSize: "1.65em", fontFamily: "inherit" }} onClick={() => handleClickedArea(tramite)} isLoading={isLoading} />
                         ))}
                     </Box>
-                    <Button variant="contained" color="error" size="large" style={{ fontFamily: "inherit", fontWeight: "bold", fontSize: "2em" }} className="w-1/2" onClick={() => handleBack()}>
+                    <LoadingButton isLoading={isLoading} variant="contained" color="error" size="large" style={{ fontFamily: "inherit", fontWeight: "bold", fontSize: "2em" }} className="w-1/2" onClick={() => handleBack()}>
                         Volver
-                    </Button>
+                    </LoadingButton>
                 </Box>
             </Box>
         </React.Fragment>

@@ -59,23 +59,10 @@ const useBackoffice = (id: number) => {
         });
 
         socket.on(EVENTS.GENERAL.TERMINAL_STATUS, (data) => {
-            console.log(data.pendingTickets);
             setPendingTickets(data.pendingTickets);
             setTakenTickets(data.takenTickets);
             setIsLoading((prev) => ({ ...prev, "CALL": false, "FINISH": false, "CANCEL": false }));
         })
-
-        // socket.on(EVENTS.BACKOFFICE.RECALL_TICKET, (data) => {
-        //     console.log(data)
-        // })
-
-        // socket.on(EVENTS.BACKOFFICE.TICKET_FINISHED, (data: { ticketId: number, type: string }) => {
-        //     setIsLoading((prev) => ({ ...prev, [data.type]: false }))
-        // })
-
-        // socket.on(EVENTS.BACKOFFICE.TICKET_TAKEN, () => {
-        //     setIsLoading((prev) => ({ ...prev, "CALL": false }))
-        // });
 
         return () => {
             socket.disconnect();
@@ -84,18 +71,19 @@ const useBackoffice = (id: number) => {
     }, [socket]);
 
     useEffect(() => {
-        let interval: NodeJS.Timeout
-        if (timer >= 0) {
-            interval = setInterval(() => {
-                setTimer((prev) => prev - 1)
-            }, 1000)
+        let interval: NodeJS.Timeout;
+        if (timer >= 0 && ticketRecalled) {
+          interval = setInterval(() => {
+            setTimer((prev) => prev - 1);
+            // console.log(timer);
+          }, 1000);
         } else {
-            setTicketRecalled(false)
-            setTimer(20)
+          setTicketRecalled(false);
+          setTimer(5);
         }
-
-        return () => clearInterval(interval)
-    }, [timer])
+    
+        return () => clearInterval(interval);
+      }, [ticketRecalled, timer]);
 
     const handleCallTicket = (ticket: Ticket) => {
         if (takenTickets.length > 0) {
