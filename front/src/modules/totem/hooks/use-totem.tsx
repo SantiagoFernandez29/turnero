@@ -14,6 +14,8 @@ const useTotem = () => {
     const [area, setArea] = useState<string>("");
     const [showHomeView, setShowHomeView] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [priority, setPriority] = useState(false);
+    
 
     const { current: socket } = useRef<Socket>(
         io(SOCKET_URL, {
@@ -63,7 +65,7 @@ const useTotem = () => {
     const handleClickedArea = (tramite: Procedure) => {
         const payload = {
             areaId: tramite.areaId,
-            prioritary: true,
+            prioritary: priority,
             procedureId: tramite.id,
         };
         setIsLoading(true);
@@ -72,7 +74,7 @@ const useTotem = () => {
         setShowHomeView(true)
     };
 
-    return { handleClickedArea, setShowHomeView, showHomeView, area, isLoading };
+    return { handleClickedArea, setShowHomeView, setPriority, showHomeView, area, isLoading, priority };
 };
 
 export default useTotem;

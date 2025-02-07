@@ -1,15 +1,16 @@
 import AreaButton from "../components/AreaButton";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, Switch, TextField, Typography } from "@mui/material";
 import useTotem from "../hooks/use-totem";
 import React, { useState } from "react";
 import { useProcedures } from "../hooks/use-procedures";
 import useAuth from "../../auth/hooks/use-auth";
+import { Accessibility, PersonStanding } from 'lucide-react';
 
 const TotemHomeView = () => {
 
     const { user, token, logout } = useAuth();
     const { data: tramites } = useProcedures(token ? token : "", user ? user.areaId : -1, logout);
-    const { handleClickedArea, setShowHomeView, showHomeView, area, isLoading } = useTotem();
+    const { handleClickedArea, setShowHomeView, setPriority, showHomeView, area, isLoading, priority } = useTotem();
 
     const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     const [document, setDocument] = useState("");
@@ -20,6 +21,16 @@ const TotemHomeView = () => {
 
     const handleDelete = () => {
         setDocument((prev) => prev.slice(0, -1));
+    }
+
+    const handleChangePriority = (event) => {
+        setPriority(event.target.checked);
+    }
+
+    const handleBack = () => {
+        setShowHomeView(true);
+        setPriority(false);
+        setDocument("");
     }
 
     return (
@@ -39,10 +50,8 @@ const TotemHomeView = () => {
                             <Button variant="contained" color="secondary" size="small" className="col-start-2" style={{ fontSize: "2em", fontWeight: "bold", fontFamily: "inherit" }} onClick={() => handleClick(0)}>0</Button>
                         </Box>
                         <Box className="flex flex-row gap-5">
-                            <TextField variant="standard" placeholder="Documento" color="secondary" value={document} fullWidth sx={{ input: { fontSize: "1.75em", fontFamily: "Quicksand" } }} slotProps={{ input: { endAdornment:
-
-                            <Button variant="contained" color="error" size="large" style={{ fontSize: "1.5em", fontWeight: "bold", padding: "2p" }} onClick={() => handleDelete()}>Borrar</Button> 
-                             }}}/>
+                            <TextField variant="standard" placeholder="Documento" color="secondary" value={document} fullWidth sx={{ input: { fontSize: "1.75em", fontFamily: "Quicksand" } }} />
+                            <Button variant="contained" color="error" size="large" style={{ fontSize: "1.5em", fontWeight: "bold" }} onClick={() => handleDelete()}>Borrar</Button>
                         </Box>
                     </Box>
                     <Box className="flex items-center justify-center">
@@ -53,14 +62,24 @@ const TotemHomeView = () => {
                 </Box>
             </Box>
             <Box className={`${showHomeView ? "hidden" : "flex"}`}>
-                <Box className="flex flex-col items-center gap-10 place-content-between m-5">
+                <Box className="flex flex-col items-center place-content-between m-5">
                     <Typography variant="h4" style={{ fontWeight: "lighter", fontFamily: "inherit", textAlign: "center" }}> Seleccione el trámite sobre el cual desea solicitar un turno. </Typography>
+                    <Box className="flex flex-row p-3 rounded-lg gap-4 bg-lime-300">
+                        <Accessibility size={32} />
+                        <PersonStanding size={32} />
+                        <Typography variant="h5" style={{ fontWeight: "bold", fontFamily: "inherit", textAlign: "center" }}> ¿Presenta condición prioritaria? </Typography>
+                        <Stack direction="row" spacing={1}>
+                            <Typography variant="h6" style={{ fontFamily: "inherit" }}> No </Typography>
+                            <Switch color="success" checked={priority} onChange={handleChangePriority}/>
+                            <Typography variant="h6" style={{ fontFamily: "inherit" }}> Sí </Typography>
+                        </Stack>
+                    </Box>
                     <Box className="grid grid-cols-2 gap-4 w-full">
                         {tramites && tramites.map((tramite) => (
                             <AreaButton key={tramite.id} title={tramite.name} style={{ fontSize: "1.65em", fontFamily: "inherit" }} onClick={() => handleClickedArea(tramite)} isLoading={isLoading} />
                         ))}
                     </Box>
-                    <Button variant="contained" color="error" size="large" style={{ fontFamily: "inherit", fontWeight: "bold", fontSize: "2em" }} className="w-1/2" onClick={() => setShowHomeView(true)}>
+                    <Button variant="contained" color="error" size="large" style={{ fontFamily: "inherit", fontWeight: "bold", fontSize: "2em" }} className="w-1/2" onClick={() => handleBack()}>
                         Volver
                     </Button>
                 </Box>
