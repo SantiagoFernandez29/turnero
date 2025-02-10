@@ -1,17 +1,18 @@
 import AreaButton from "../components/AreaButton";
 import { Box, Button, Stack, Switch, TextField, Typography } from "@mui/material";
 import useTotem from "../hooks/use-totem";
-import React, { useEffect } from "react";
+import React from "react";
 import { useProcedures } from "../hooks/use-procedures";
 import useAuth from "../../auth/hooks/use-auth";
 import { Accessibility, PersonStanding } from 'lucide-react';
 import LoadingButton from "../../shared/components/ui/loading-button";
+import TicketCreatedModal from "../components/TicketCreatedModal";
 
 const TotemHomeView = () => {
 
     const { user, token, logout } = useAuth();
     const { data: tramites } = useProcedures(token ? token : "", user ? user.areaId : -1, logout);
-    const { handleClickedArea, setShowHomeView, setPriority, setDocument, showHomeView, area, isLoading, priority, document } = useTotem();
+    const { handleClickedArea, setShowHomeView, setPriority, setDocument, setOpenModal, showHomeView, area, isLoading, priority, document, openModal, ticketCreated, tramiteSelected } = useTotem();
 
     const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -32,14 +33,6 @@ const TotemHomeView = () => {
         setPriority(false);
         setDocument("");
     }
-
-    useEffect(() => {
-        if (isLoading) {
-            setShowHomeView(false);
-        } else {
-            setShowHomeView(true);
-        }
-    }, [isLoading, setShowHomeView]);
 
     return (
         <React.Fragment>
@@ -95,6 +88,7 @@ const TotemHomeView = () => {
                     <LoadingButton isLoading={isLoading} variant="contained" color="error" size="large" style={{ fontFamily: "inherit", fontWeight: "bold", fontSize: "2em" }} className="w-1/2" onClick={() => handleBack()}>
                         Volver
                     </LoadingButton>
+                    <TicketCreatedModal ticket={ticketCreated} openModal={openModal} tramite={tramiteSelected} isLoading={isLoading} setOpenModal={setOpenModal} setShowHomeView={setShowHomeView} />
                 </Box>
             </Box>
         </React.Fragment>

@@ -23,6 +23,7 @@ const useBackoffice = (id: number) => {
         "FINISH": false,
         "CANCEL": false,
     });
+    const [isTicketTaken, setIsTicketTaken] = useState<boolean>(false);
 
     const { token, logout } = useAuth();
 
@@ -64,6 +65,10 @@ const useBackoffice = (id: number) => {
             setIsLoading((prev) => ({ ...prev, "CALL": false, "FINISH": false, "CANCEL": false }));
         })
 
+        socket.on(EVENTS.BACKOFFICE.TICKET_TAKEN, () => {
+            setIsTicketTaken(true);
+        });
+
         return () => {
             socket.disconnect();
         }
@@ -75,7 +80,6 @@ const useBackoffice = (id: number) => {
         if (timer >= 0 && ticketRecalled) {
           interval = setInterval(() => {
             setTimer((prev) => prev - 1);
-            // console.log(timer);
           }, 1000);
         } else {
           setTicketRecalled(false);
@@ -95,6 +99,7 @@ const useBackoffice = (id: number) => {
             ticketId: ticket.id,
         }
         setIsLoading((prev) => ({ ...prev, "CALL": true }));
+        
         socket.emit(EVENTS.BACKOFFICE.TAKE_TICKET, payload);
     }
 

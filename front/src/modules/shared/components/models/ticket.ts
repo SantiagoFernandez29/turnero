@@ -13,6 +13,7 @@ export type Ticket = {
   prioritary: boolean;
   procedure: string;
   procedureId: number;
-  takenAt: string | null;
+  takenAt: Date | null;
+  createdAt: Date;
   userId: number;
 };

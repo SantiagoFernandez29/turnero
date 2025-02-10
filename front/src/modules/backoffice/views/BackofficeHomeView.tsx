@@ -48,7 +48,7 @@ const BackofficeHomeView = () => {
           <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold", fontFamily: "inherit" }}>Pendientes</Typography>
           <Box className=" flex flex-col gap-10">
             {pendingTickets.length >= 1 &&
-              pendingTickets.slice(0, 5).reverse().map((ticket, index) => (
+              pendingTickets.slice(0, 5).map((ticket, index) => (
                 <Box
                   key={index}
                   className={index === 0 ? "flex flex-row items-center justify-between bg-lime-300 p-2 rounded-lg shadow-lg w-" : "flex flex-row items-center justify-between bg-indigo-100 p-2 rounded-lg shadow-lg"}
@@ -124,7 +124,14 @@ const BackofficeHomeView = () => {
                   </Box>
                   {takenTickets[0]?.citizenName && takenTickets[0]?.citizenSurname && <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>{takenTickets[0]?.citizenSurname}, {takenTickets[0]?.citizenName}</Typography>}
                   <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>{takenTickets[0]?.document}</Typography>
-                  <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>Horario de llamado: {takenTickets[0].takenAt && `${new Date(takenTickets[0].takenAt).toLocaleDateString('ES-es', {
+                  <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>Creación: {takenTickets[0].createdAt && `${new Date(takenTickets[0].createdAt).toLocaleDateString('ES-es', {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}`}</Typography>
+                  <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>Llamado: {takenTickets[0].takenAt && `${new Date(takenTickets[0].takenAt).toLocaleDateString('ES-es', {
                     year: 'numeric',
                     month: 'numeric',
                     day: 'numeric',

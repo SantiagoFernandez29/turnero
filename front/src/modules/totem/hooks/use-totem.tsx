@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { Procedure } from "../models/procedure";
 import useAuth from "../../auth/hooks/use-auth";
 import { AreaDto } from "../dto/area";
+import { Ticket } from "../../shared/components/models/ticket";
 
 
 const useTotem = () => {
@@ -16,6 +17,9 @@ const useTotem = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [priority, setPriority] = useState(false);
     const [document, setDocument] = useState("");
+    const [openModal, setOpenModal] = useState(false);
+    const [tramiteSelected, setTramiteSelected] = useState<Procedure>();
+    const [ticketCreated, setTicketCreated] = useState<Ticket>();
 
     const { current: socket } = useRef<Socket>(
         io(SOCKET_URL, {
@@ -52,7 +56,8 @@ const useTotem = () => {
             setShowHomeView(true);
         });
 
-        socket.on(EVENTS.TOTEM.TICKET_CREATED, () => {
+        socket.on(EVENTS.TOTEM.TICKET_CREATED, (ticket: Ticket) => {
+            setTicketCreated(ticket);
             setIsLoading(false);
         })
 
@@ -63,6 +68,7 @@ const useTotem = () => {
     }, [socket]);
 
     const handleClickedArea = (tramite: Procedure) => {
+        setTramiteSelected(tramite);
         const payload = {
             document: document,
             prioritary: priority,
@@ -72,11 +78,11 @@ const useTotem = () => {
         setPriority(false);
         setIsLoading(true);
         socket.emit(EVENTS.TOTEM.CREATE_TICKET, payload);
-        toast.success(`Seleccionó el trámite "${tramite.name}"`);
+        setOpenModal(true);
     };
-    
 
-    return { handleClickedArea, setShowHomeView, setPriority, setDocument, showHomeView, area, isLoading, priority, document };
+
+    return { handleClickedArea, setShowHomeView, setPriority, setDocument, setOpenModal, showHomeView, area, isLoading, priority, document, openModal, tramiteSelected, ticketCreated };
 };
 
 export default useTotem;
