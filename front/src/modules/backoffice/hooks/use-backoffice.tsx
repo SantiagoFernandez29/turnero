@@ -37,6 +37,7 @@ const useBackoffice = (id: number) => {
             },
             autoConnect: false,
             transports: ["websocket"],
+            path: "/socket.io/",
         })
     );
 

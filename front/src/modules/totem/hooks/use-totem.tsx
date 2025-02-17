@@ -28,6 +28,7 @@ const useTotem = () => {
             },
             autoConnect: false,
             transports: ["websocket"],
+            path: "/socket.io/",
         })
     );
 
@@ -70,7 +71,7 @@ const useTotem = () => {
     const handleClickedArea = (tramite: Procedure) => {
         setTramiteSelected(tramite);
         const payload = {
-            document: document,
+            document: Number(document),
             prioritary: priority,
             procedureId: tramite.id,
         };

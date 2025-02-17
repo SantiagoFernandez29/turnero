@@ -24,6 +24,7 @@ const useMonitor = () => {
             },
             autoConnect: false,
             transports: ["websocket"],
+            path: "/socket.io/",
         })
     );
 

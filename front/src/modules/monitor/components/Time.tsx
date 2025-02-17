@@ -15,7 +15,7 @@ const Time = () => {
 
     return (
         <Box className="flex flex-col bg-violet-200 rounded-lg items-center w-full p-2">
-            <Box className="flex flex-col w-full items-center">
+            <Box className="flex flex-col w-full items-center gap-2">
                 <Typography variant="h3" style={{ fontWeight: "lighter", fontFamily: "inherit", textAlign: "center" }} className="w-fit">
                     {time.toLocaleDateString("es-ES", {
                         weekday: "long",

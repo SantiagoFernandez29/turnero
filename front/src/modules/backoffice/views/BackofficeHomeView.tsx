@@ -119,7 +119,7 @@ const BackofficeHomeView = () => {
                 </Box>
                 <Box className="flex flex-col bg-slate-50 p-2 rounded-lg shadow-lg">
                   <Box className="flex flex-row items-center justify-between">
-                    <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>{takenTickets[0]?.code}</Typography>
+                    <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit", color: takenTickets[0]?.prioritary ? "green" : "black" }}>{takenTickets[0]?.code}</Typography>
                     <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit", color: "indigo" }}>{takenTickets[0]?.procedure}</Typography>
                   </Box>
                   {takenTickets[0]?.citizenName && takenTickets[0]?.citizenSurname && <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>{takenTickets[0]?.citizenSurname}, {takenTickets[0]?.citizenName}</Typography>}

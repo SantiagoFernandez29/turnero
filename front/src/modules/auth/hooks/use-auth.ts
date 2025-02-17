@@ -30,10 +30,10 @@ const useAuth = () => {
     const mutation = useCreateToken(onSuccess, onError)
     
     const logout = () => {
-        setUser(null);
-        setToken(null);
         if (user?.terminalType.toLowerCase() === "box") localStorage.removeItem("box");
         navigate(PATHS.GENERAL.LOGIN);
+        setUser(null);
+        setToken(null);
     }
     
     return {
