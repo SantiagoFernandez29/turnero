@@ -17,12 +17,19 @@ const TotemHomeView = () => {
     const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     const handleClick = (number: number) => {
+        if (document.length >= 8) return;
         setDocument((prev) => prev + number);
     }
 
     const handleDelete = () => {
         setDocument((prev) => prev.slice(0, -1));
     }
+
+    const formatDocument = (doc: string) => {
+        if (doc.length <= 2) return doc;
+        if (doc.length <= 5) return `${doc.slice(0, 2)}.${doc.slice(2)}`;
+        return `${doc.slice(0, 2)}.${doc.slice(2, 5)}.${doc.slice(5)}`;
+    };
 
     const handleChangePriority = (event) => {
         setPriority(event.target.checked);
@@ -51,12 +58,12 @@ const TotemHomeView = () => {
                             <Button variant="contained" color="secondary" size="small" className="col-start-2" style={{ fontSize: "2em", fontWeight: "bold", fontFamily: "inherit" }} onClick={() => handleClick(0)}>0</Button>
                         </Box>
                         <Box className="flex flex-row gap-5">
-                            <TextField variant="standard" placeholder="Documento" color="secondary" value={document} fullWidth sx={{ input: { fontSize: "1.75em", fontFamily: "Quicksand" } }} />
+                            <TextField variant="standard" placeholder="Documento" color="secondary" value={formatDocument(document)} fullWidth sx={{ input: { fontSize: "1.75em", fontFamily: "Quicksand" } }} />
                             <Button variant="contained" color="error" size="large" style={{ fontSize: "1.5em", fontWeight: "bold" }} onClick={() => handleDelete()}>Borrar</Button>
                         </Box>
                     </Box>
                     <Box className="flex items-center justify-center">
-                        <Button variant="contained" color="secondary" size="large" className="w-3/4" style={{ fontSize: "1.25em", fontWeight: "bold" }} onClick={() => setShowHomeView(false)}>
+                        <Button variant="contained" color="secondary" size="large" className="w-3/4" style={{ fontSize: "1.25em", fontWeight: "bold" }} onClick={() => setShowHomeView(false)} disabled={document.length < 8}>
                             Solicitar turno
                         </Button>
                     </Box>
@@ -66,7 +73,7 @@ const TotemHomeView = () => {
                 <Box className="flex flex-col items-center place-content-between m-5">
                     <Typography variant="h4" style={{ fontWeight: "lighter", fontFamily: "inherit", textAlign: "center" }}> Seleccione el trámite sobre el cual desea solicitar un turno. </Typography>
                     <Box className="flex flex-row p-3 rounded-lg gap-4 bg-lime-300">
-                        
+
                         <Typography variant="h5" style={{ fontWeight: "bold", fontFamily: "inherit", textAlign: "center" }}> ¿Presenta condición prioritaria? </Typography>
                         <Stack direction="row" spacing={1}>
                             <Box className="flex flex-row gap-2 items-start">

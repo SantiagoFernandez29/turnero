@@ -1,5 +1,5 @@
 import { io, Socket } from "socket.io-client";
-import { SOCKET_URL } from "../../../configs/constants/url";
+import { environment, SOCKET_URL } from "../../../configs/constants/url";
 import { useEffect, useRef, useState } from "react";
 import { Ticket } from "../../shared/components/models/ticket";
 import { EVENTS } from "../../../configs/constants/events";
@@ -7,6 +7,7 @@ import sound_effect from "../../../assets/sounds/sound_effect.mp3";
 import useAuth from "../../auth/hooks/use-auth";
 import toast from "react-hot-toast";
 
+const audio = new Audio(sound_effect)
 
 const useMonitor = () => {
 
@@ -24,7 +25,7 @@ const useMonitor = () => {
             },
             autoConnect: false,
             transports: ["websocket"],
-            path: "/socket.io/",
+            path: (environment === "PROD" || environment === "DEV") ? "/api/socket.io/" : "/socket.io/",
         })
     );
 
@@ -32,6 +33,9 @@ const useMonitor = () => {
     useEffect(() => {
 
         socket.connect();
+
+        audio.load();
+        audio.volume = 0.1;
 
         socket.on(EVENTS.GENERAL.CONNECT, () => {
             console.log("Conectado al servidor WebSocket")
@@ -56,7 +60,7 @@ const useMonitor = () => {
         socket.on(EVENTS.MONITOR.TICKET_TAKEN, (ticket: Ticket) => {
             setIdTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: true }));
             setTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: true }));
-            new Audio(sound_effect).play();
+            audio.play();
             setTimeout(() => {
                 setTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: false }));
                 setIdTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: false }));
@@ -66,7 +70,7 @@ const useMonitor = () => {
         socket.on(EVENTS.MONITOR.RECALL_TICKET, (ticket: Ticket) => {
             setIdTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: true }));
             setTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: true }));
-            new Audio(sound_effect).play();
+            audio.play();
             setTimeout(() => {
                 setTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: false }));
                 setIdTicketRecalled((prevState) => ({ ...prevState, [ticket.id]: false }));

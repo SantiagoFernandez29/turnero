@@ -33,6 +33,12 @@ const BackofficeHomeView = () => {
     }
   }, []);
 
+  const formatDocument = (doc: string) => {
+    if (doc.length <= 2) return doc;
+    if (doc.length <= 5) return `${doc.slice(0, 2)}.${doc.slice(2)}`;
+    return `${doc.slice(0, 2)}.${doc.slice(2, 5)}.${doc.slice(5)}`;
+};
+
   return (
     <Box className="flex flex-col gap-10 m-5 w-full">
       <Box className="flex flex-row justify-between w-full mt-2">
@@ -123,7 +129,7 @@ const BackofficeHomeView = () => {
                     <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit", color: "indigo" }}>{takenTickets[0]?.procedure}</Typography>
                   </Box>
                   {takenTickets[0]?.citizenName && takenTickets[0]?.citizenSurname && <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>{takenTickets[0]?.citizenSurname}, {takenTickets[0]?.citizenName}</Typography>}
-                  <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>{takenTickets[0]?.document}</Typography>
+                  {takenTickets[0]?.document !== null && <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>{formatDocument(String(takenTickets[0]?.document))}</Typography>}
                   <Typography variant="h6" style={{ fontWeight: "bold", fontFamily: "inherit" }}>Creación: {takenTickets[0].createdAt && `${new Date(takenTickets[0].createdAt).toLocaleDateString('ES-es', {
                     year: 'numeric',
                     month: 'numeric',

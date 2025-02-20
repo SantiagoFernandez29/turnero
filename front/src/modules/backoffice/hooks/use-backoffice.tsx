@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { SOCKET_URL } from "../../../configs/constants/url";
+import { environment, SOCKET_URL } from "../../../configs/constants/url";
 import { EVENTS } from "../../../configs/constants/events";
 import { Ticket } from "../../shared/components/models/ticket";
 import toast from "react-hot-toast";
@@ -37,7 +37,7 @@ const useBackoffice = (id: number) => {
             },
             autoConnect: false,
             transports: ["websocket"],
-            path: "/socket.io/",
+            path: (environment === "PROD" || environment === "DEV") ? "/api/socket.io/" : "/socket.io/",
         })
     );
 
