@@ -5,6 +5,7 @@ import PATHS from "../../../configs/constants/paths";
 import { useEffect } from "react";
 import LoadingButton from "../../shared/components/ui/loading-button";
 import useAuth from "../../auth/hooks/use-auth";
+import PipListDisplayer from "../components/PipListDisplayer";
 
 const BackofficeHomeView = () => {
   const navigate = useNavigate();
@@ -53,6 +54,7 @@ const BackofficeHomeView = () => {
         <Box className="flex flex-col gap-5 bg-violet-200 p-8 rounded-lg shadow-lg">
           <Typography variant="h4" className="uppercase text-center" style={{ fontWeight: "bold", fontFamily: "inherit" }}>Pendientes</Typography>
           <Box className=" flex flex-col gap-10">
+            {pendingTickets.length > 0 && <PipListDisplayer pendingTickets={pendingTickets} />}
             {pendingTickets.length >= 1 &&
               pendingTickets.slice(0, 5).map((ticket, index) => (
                 <Box
