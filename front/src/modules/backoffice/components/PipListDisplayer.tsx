@@ -14,10 +14,10 @@ const PipListDisplayer = ({ pendingTickets }: PipListDisplayerProps) => {
     const WindowContents = ({ pendingTickets }: PipListDisplayerProps) => {
         return (
             <Box className="box-1">
-                <Typography variant="h2" className="title" style={{ fontFamily: "inherit"}}>Pendientes</Typography>
+                <Typography variant="h2" className="title" style={{ fontFamily: "inherit"}}>Pendientes: {pendingTickets.length}</Typography>
                 <Box className="box-2">
                     {pendingTickets.length >= 1 &&
-                        pendingTickets.slice(0, 5).map((ticket, index) => (
+                        pendingTickets.slice(0, 3).map((ticket, index) => (
                             <Box
                                 key={index}
                                 className={index === 0 ? "box-3-1 " : "box-3-2"}
